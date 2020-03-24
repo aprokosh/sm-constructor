@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <title>Главная</title>
+    <link rel="icon" href="style/img/icon.png">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid body">
+    <div class="row page_top">
+        <div class="logo"><img src="style/img/logo.svg" alt="logo"></div>
+        <div class="title">Смарт-контракты</div>
+    </div>
+
+    <div class="row subpanel">
+        <ul id="navbar">
+        <li><a class="current" href="/create">Создать</a></li>
+        <li><a href="/saved">Сохраненные</a></li>
+        <li><a href="/my-contracts">Готовые</a></li>
+            <li><a href="/logout">Выход</a></li>
+        </ul>
+    </div>
+    <div class="row main"><div class="col-2"></div><div class="col-8"><h2>Создание смарт-контракта</h2></div></div>
+    <div class="row main">
+        <div class="col-1"></div>
+        <div class="col-5 left_col">
+            <h4>Выберите составляющие</h4>
+            <div id="parameters"></div>
+            <div class="accordeon_block">
+                <h3 class="clickable">Блок #1</h3>
+                <block>
+                    <div class="clickable">Опция#1</div>
+                    <div class="clickable">Опция#2</div>
+                    <div class="clickable">Опция#3</div>
+                </block>
+            </div>
+            <div class="accordeon_block">
+                <h3 class="clickable">Блок #2</h3>
+                <block>
+                    <div class="clickable">Опция#1</div>
+                    <div class="clickable">Опция#2</div>
+                    <div class="clickable">Опция#3</div>
+                </block>
+            </div>
+            <div class="accordeon_block">
+                <h3 class="clickable">Функции</h3>
+                <block>
+                    <div class="fun_option1 clickable">Имя</div>
+                    <div class="fun_option2 clickable">Возраст</div>
+                    <div class="fun_option3 clickable">Очень важное мнение</div>
+                </block>
+            </div>
+        </div>
+        <div class="col-5 right_col">
+            <h4>Ваш смарт-контракт</h4>
+            <button class="btn btn-outline-dark lng" type="submit">Язык#1</button>
+            <button class="btn btn-outline-dark lng" type="submit">Язык#2</button>
+            <button class="btn btn-outline-dark lng" type="submit">Язык#3</button>
+            <form action="/sc-name" method="post" id="form">
+            <label id='name'>Введите название</label><br>
+            <input type='text', name='name' class="form-control sc-name" required><br>
+            <input type='submit', class='btn btn-outline-dark', value=Сохранить>
+                <input type='submit', class='btn btn-outline-dark', value=Сгенерировать>
+            </form>
+        </div>
+    </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+/*Цветовая схема - https://colorscheme.ru/#2Y11Tw0w0w0w0*/
+/*#f7effb - самый светлый
+#eddbf6
+#e3c6f1
+#d8b2ec*/
+@font-face {
+    font-family: "Tenoture";
+    src: url("fonts/logo-font.ttf");
+}
+
+.body {
+    background-color: white;
+}
+
+/* Шапка страницы*/
+.page_top{
+    /*background-color: #92d9e4;*/
+    background-color: #5d2080;
+    height: 13vh;
+}
+
+.logo{
+    width: 11vh;
+    height: 11vh;
+    margin-left: 27vw;
+    margin-top: 1vh;
+}
+
+.logo img{
+    width: 100%;
+    height: 100%;
+}
+
+.title{
+    font-size: 5vh;
+    color: #f5f5f5;
+    font-family: "Tenoture", sans-serif;
+    margin-left: 2vw;
+    margin-top: 2vh;
+}
+
+.subpanel{
+    background-color: #7a2aa9;
+    height: 7vh;
+}
+
+/*Меню*/
+#navbar {
+    margin: 1vh;
+    padding: 0;
+    list-style-type: none;
+    width: 100vw;
+    text-align: center;
+}
+#navbar li {
+    display: inline;
+    margin-right: 3vh;
+}
+#navbar a {
+    color: #fff;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    width: 10vw;
+}
+#navbar a:hover {
+    border-radius: 1vh;
+    background-color: #5d2080;
+}
+
+#navbar .current {
+    border-radius: 1vh;
+    background-color: #5d2080;
+}
+
+/*Основная часть страницы*/
+.main{
+    margin-top: 5vh;
+}
+
+.left_col{
+    border-right: 1vh solid #5d2080;
+}
+
+h4{
+    font-size: 9vh;
+    padding-bottom: 5vh;
+    text-align: center;
+}
+/* Ввод параметров*/
+
+.enter_param{
+    background-color: #eddbf6;
+    width: 35vw;
+    position: fixed;
+    top: 40vh;
+    left: 10vw;
+    border-radius: 0.5vh;
+    border: 0.1vh solid #5d2080;
+}
+
+.enter_param_head{
+    background-color: #b975dd;
+    padding: 1.5vh;
+    border-radius: 0.5vh;
+    border: 0.1vh solid #5d2080;
+    border-right: 0vh;
+}
+.enter_param_head h3{
+    font-size: 4.2vh;
+}
+.cross_image{
+    width: 3.5vh;
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+}
+
+.enter_param_body{
+    padding: 20vh;
+}
+
+.submit_param {
+    position: absolute;
+    bottom: 1vh;
+    right: 1vh;
+}
+/*Аккордеоны*/
+.clickable{
+    cursor: pointer;
+}
+
+.accordeon_block{
+    width: 30vw;
+    background-color: #f7effb;
+    margin-bottom:2vh;
+}
+
+.accordeon_block h3{
+    width: 100%;
+    background-color: #e3c6f1;
+    font-size: 4vh;
+    border-radius: 0.5vh;
+    padding: 1.5vh;
+}
+
+block{
+    width: 100%;
+    padding: 1.5vh;
+    border-radius: 0.5vh;
+    display: none;
+}
+
+
+/*Правая часть*/
+
+.lng{
+    margin: 0 7vh;
+}
+
+/*404*/
+.btn404 {
+    width: 30vw;
+    height: 25vh;
+    background: #5d2080;
+    border-radius: 1vh;
+    display: inline-block;
+    margin: 3vw;
+}
+.btn404 a {
+    display: block;
+    text-align: center;
+    height: 100%;
+    padding: 6vh;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 7vh;
+}
+
+.btn404 a:hover {
+    border-radius: 1vh;
+    background-color: #7a2aa9;
+    text-decoration: none;
+    color: #ffffff;
+}

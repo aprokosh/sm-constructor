@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <link rel="icon" href="style/img/icon.png">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+    <body>
+    <div class="container-fluid body">
+        <div class="row page_top">
+            <div class="logo"><img src="style/img/logo.svg" alt="logo"></div>
+            <div class="title">Смарт-контракты</div>
+        </div>
+
+        <div class="row subpanel">
+            <ul id="navbar">
+                <li><a href="/">Вход</a></li>
+                <li><a class="current" href="/sign-up">Регистрация</a></li>
+            </ul>
+        </div>
+        <div class="row main">
+            <div class="col-2"></div>
+            <div class="col-8 autho">
+                    <span>
+                        <form action="/sign-up" method="post" id="form">
+                            <label id='name'>Имя пользователя</label><br>
+                            <input type='text', name='name' class="form-control username" required><br>
+                            <label id='password1'>Пароль</label><br>
+                            <input type='password', name='password1' class="form-control userpass" required><br>
+                            <label id='password2'>Повторите пароль</label><br>
+                            <input type='password', name='password2' class="form-control" required><br>
+                            <input type='submit', class='btn btn-outline-dark', value='Регистрация'>
+                        </form>
+                    </span>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script src="js/main.js"></script>
+    </body>
+</html>
