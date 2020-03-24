@@ -9,10 +9,12 @@ app.use(express.static(__dirname))
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 var Crypto = require('crypto-js')
 
-var port = process.env.PORT;
+var port = process.env.PORT||3000;
 app.listen(process.env.PORT ||port, () => {
   console.log(`Listening on port ${port}`)
 })
+
+var error_message="None";
 
 const mongoClient = require("mongodb").MongoClient;
 const url = process.env.MONGODB_URI || "mongodb://user:user2ndpass@ds159546.mlab.com:59546/smart-contracts";
@@ -42,20 +44,23 @@ app.post("/sign-up", urlencodedParser, function (req, res) {
   mongoClient.connect(url, function (err, client) {
     client.db("smart-contracts").collection("users").findOne({login: req.body.name}, function(err,result){
       if (result) {
-        console.log("Имя пользователя уже используется")
+        console.log("Имя пользователя занято");
+        error_message="Имя пользователя занято";
         res.redirect('/sign-up')
       }
       else if (req.body.password1 != req.body.password2){
         console.log("Введенные пароли не совпадают!")
+        error_message="Введенные пароли не совпадают!";
         res.redirect('/sign-up')
       }
       else if (!check) {
         console.log("Слабый пароль")
         res.redirect('/sign-up')
+        error_message="Слабый пароль";
       }
       else {
         client.db("smart-contracts").collection("users").insertOne({login: req.body.name, password: Crypto.SHA256(req.body.password1).toString(), role: 'user', fav: []});
-        res.sendFile(__dirname + '/login.html')
+        res.sendFile(__dirname + '/login.html');
       }
     });
   });
@@ -68,20 +73,26 @@ app.post("/login", urlencodedParser, function (req, res) {
         if (Crypto.SHA256(req.body.password).toString() === result.password) {
           req.session.authorized = true;
           req.session.username = req.body.login;
-          req.session.role = result.role;
           res.redirect('/my-contracts');
         }
         else {
           console.log('Неверный пароль');
-          res.redirect('/')
+          error_message="Неверный пароль";
+          res.redirect('/');
         }
       }
       else {
         console.log('Пользователя с таким именем не существует');
-        res.redirect('/')
+        error_message="Пользователя с таким именем не существует";
+        res.redirect('/');
       }
     });
   });
+});
+
+app.get("/geterror", (request, result)=>{
+  result.send(error_message);
+  error_message="None";
 });
 
 app.get('/logout', (req, res) => {
