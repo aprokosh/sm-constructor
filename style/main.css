@@ -90,24 +90,25 @@ h4{
 }
 /* Ввод параметров*/
 
-.enter_param{
+.push{
     background-color: #eddbf6;
     width: 35vw;
-    position: fixed;
-    top: 40vh;
-    left: 10vw;
+    position: absolute;
+    /*top: 40vh;
+    left: 10vw;*/
     border-radius: 0.5vh;
     border: 0.1vh solid #5d2080;
 }
 
-.enter_param_head{
-    background-color: #b975dd;
+.push_head{
+    background-color: #5d2080;
     padding: 1.5vh;
     border-radius: 0.5vh;
     border: 0.1vh solid #5d2080;
     border-right: 0vh;
+    color: white;
 }
-.enter_param_head h3{
+.push_head h3{
     font-size: 4.2vh;
 }
 .cross_image{
@@ -117,8 +118,8 @@ h4{
     right: 1vh;
 }
 
-.enter_param_body{
-    padding: 20vh;
+.push_body{
+    padding: 2vh;
 }
 
 .submit_param {
@@ -239,4 +240,13 @@ block{
 
 #btn1 a{
     padding:1vh;
+}
+/*Вход и регистрация*/
+.password_requires{
+    font-size: 1.8vh;
+}
+
+#err_msg{
+    position: absolute;
+    width: 20vw;
 }

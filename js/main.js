@@ -1,9 +1,9 @@
 function getNewBlock () {
     let qq = '';
-    qq += '<div class="enter_param">';
+    qq += '<div class="push">';
     qq += '<img class="cross_image clickable" src="style/img/cross.svg" alt="close">';
-    qq += '<div class="enter_param_head"><h3>Ввод параметров</h3></div>';
-    qq += '<div class="enter_param_body">Здесь будет ввод параметров</div>';
+    qq += '<div class="push_head"><h3>Ввод параметров</h3></div>';
+    qq += '<div class="push_body">Здесь будет ввод параметров</div>';
     qq += '<button class="btn btn-outline-dark submit_param" type="submit">Button</button></div>';
     document.getElementById('parameters').innerHTML = qq;
 };
@@ -45,7 +45,7 @@ function getErr(){
                 // Examine the text in the response
                 response.text().then(function(data) {
                     if (data!="None") {
-                        alert(data)
+                        showErr(data)
                         console.log(data);
                     }
                 });
@@ -54,6 +54,15 @@ function getErr(){
         .catch(function(err) {
             console.log('Fetch Error :-S', err);
         });
+}
+
+function showErr(data){
+    let qq = '';
+    qq += '<div id="err_msg", class="push">';
+    qq += '<img class="cross_image clickable" src="style/img/cross.svg" alt="close">';
+    qq += '<div class="push_head"><h3>Ошибка!</h3></div>';
+    qq += '<div class="push_body">'+data+'</div>';
+    document.getElementById('error_message').innerHTML = qq;
 }
 
 getErr();
