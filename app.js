@@ -9,7 +9,7 @@ app.use(express.static(__dirname))
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 var Crypto = require('crypto-js')
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 app.listen(process.env.PORT ||port, () => {
   console.log(`Listening on port ${port}`)
 })
