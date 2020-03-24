@@ -207,8 +207,8 @@ block{
 
 /*404*/
 .btn404 {
-    width: 30vw;
-    height: 25vh;
+    width: 25vw;
+    height: 20vh;
     background: #5d2080;
     border-radius: 1vh;
     display: inline-block;
