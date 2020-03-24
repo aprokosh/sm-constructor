@@ -47,17 +47,28 @@
             <div class="accordeon_block">
                 <h3 class="clickable">Функции</h3>
                 <block>
-                    <div class="fun_option1 clickable">Имя</div>
-                    <div class="fun_option2 clickable">Возраст</div>
-                    <div class="fun_option3 clickable">Очень важное мнение</div>
+                    <div class="fun_option1 clickable">Функция#1 (введите параметры)</div>
+                    <div class="fun_option2 clickable">Функция#2</div>
+                    <div class="fun_option3 clickable">Функция#3</div>
                 </block>
             </div>
         </div>
         <div class="col-5 right_col">
             <h4>Ваш смарт-контракт</h4>
-            <button class="btn btn-outline-dark lng" type="submit">Язык#1</button>
-            <button class="btn btn-outline-dark lng" type="submit">Язык#2</button>
-            <button class="btn btn-outline-dark lng" type="submit">Язык#3</button>
+            <form>
+            <label class="radio">
+                <input name="languages" type="radio" />
+                <div class="radio__text">Язык#1</div>
+            </label>
+            <label class="radio">
+                <input name="languages" type="radio" />
+                <div class="radio__text">Язык#2</div>
+            </label>
+            <label class="radio">
+                <input name="languages" type="radio" />
+                <div class="radio__text">Язык#3</div>
+            </label>
+            </form>
             <form action="/sc-name" method="post" id="form">
             <label id='name'>Введите название</label><br>
             <input type='text', name='name' class="form-control sc-name" required><br>
