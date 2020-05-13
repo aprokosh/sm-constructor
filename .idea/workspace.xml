@@ -7,6 +7,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectId" id="1Z0GSFnJlT6uP24r5PaWCNks829" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -16,8 +23,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tododo" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -48,7 +56,11 @@
       <option name="presentableId" value="Default" />
       <updated>1583968596274</updated>
       <workItem from="1583968601362" duration="30763000" />
-      <workItem from="1584986955635" duration="10567000" />
+      <workItem from="1584986955635" duration="11858000" />
+      <workItem from="1585067826876" duration="18050000" />
+      <workItem from="1588780483917" duration="105000" />
+      <workItem from="1589287326865" duration="1403000" />
+      <workItem from="1589296695205" duration="29142000" />
     </task>
     <servers />
   </component>
@@ -60,6 +72,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1583970539229" />
+    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1589299599550">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1589299599550" />
     <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1584988510218">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -76,9 +92,17 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1584988510218" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584987052906">
+    <state x="186" y="9" key="SettingsEditor" timestamp="1588780574651">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584987052906" />
+    <state x="186" y="9" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1588780574651" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1589316121619">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1589316121619" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1585089692999">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1585089692999" />
   </component>
 </project>

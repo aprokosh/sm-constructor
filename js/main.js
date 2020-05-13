@@ -1,13 +1,4 @@
-function getNewBlock () {
-    let qq = '';
-    qq += '<div class="push">';
-    qq += '<img class="cross_image clickable" src="style/img/cross.svg" alt="close">';
-    qq += '<div class="push_head"><h3>Ввод параметров</h3></div>';
-    qq += '<div class="push_body">Здесь будет ввод параметров</div>';
-    qq += '<button class="btn btn-outline-dark submit_param" type="submit">Button</button></div>';
-    document.getElementById('parameters').innerHTML = qq;
-};
-
+//блок-аккордеон
 $('.accordeon_block h3').click(function () {
     if (!$(this).parent().find('block').is(':visible')) {
         $(this).parent().find('block').show(200)
@@ -18,20 +9,22 @@ $('.accordeon_block h3').click(function () {
 });
 
 
-$('.fun_option1').click(function () {
-    getNewBlock();
-});
+//закрыть окошко
 
 $(document).on('click', '.cross_image', function(){
-    $(this).parent().hide(200);
+    $(this).parent().parent().toggleClass('deleteIt')
+    $("div.deleteIt").remove()
+
 });
 
-$(document).keyup(function(e){
-    if(e.keyCode === 27){
-        $(document).find('.enter_param').hide(200);
-    }
+$('#yourContract').on('click', '.cross_image', function(){
+    $(this).parent().toggleClass('deletedBlock');
+    $("div.deletedBlock").remove()
+
 });
 
+
+//получить сообщение об ошбке
 function getErr(){
     fetch('/geterror')
         .then(
@@ -56,11 +49,11 @@ function getErr(){
         });
 }
 
+//вывести сообщение об ошибке
 function showErr(data){
     let qq = '';
     qq += '<div id="err_msg", class="push">';
-    qq += '<img class="cross_image clickable" src="style/img/cross.svg" alt="close">';
-    qq += '<div class="push_head"><h3>Ошибка!</h3></div>';
+    qq += '<div class="push_head"><h3>Ошибка!</h3><img class="cross_image clickable" src="style/img/cross.svg" alt="close"></div>';
     qq += '<div class="push_body">'+data+'</div>';
     document.getElementById('error_message').innerHTML = qq;
 }

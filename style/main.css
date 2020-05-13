@@ -112,10 +112,16 @@ h4{
     font-size: 4.2vh;
 }
 .cross_image{
+    display: inline;
     width: 3.5vh;
     position: absolute;
-    top: 1vh;
-    right: 1vh;
+    top: 5px;
+    right: 5px;
+}
+
+.cross_image.funcBlock{
+    position: relative;
+    left: 90%;
 }
 
 .push_body{
@@ -153,57 +159,6 @@ block{
     display: none;
 }
 
-
-/*Правая часть*/
-.radio input {
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-    /*margin: 10px 0 0 7px;*/
-    margin: 1.5vh 0 0 0.49vw;
-}
-.radio__text {
-    position: relative;
-    /*padding: 0 0 0 35px;*/
-    padding: 0 1.5vw 0 2.2vw;
-    cursor: pointer;
-}
-
-.radio__text:before {
-    content: '';
-    position: absolute;
-    /*top: -3px;
-    left: 0;
-    width: 22px;
-    height: 22px;
-    border: 1px solid #CDD1DA;*/
-    top: -0.45vh;
-    left: 0;
-    width: 1.54vw;
-    height: 3.3vh;
-    border: 0.15vh solid #CDD1DA;
-    border-radius: 50%;
-    background: #FFF;
-}
-.radio__text:after {
-    content: '';
-    position: absolute;
-    /*top: 1px;
-    left: 4px;
-    width: 16px;
-    height: 16px;*/
-    top: 0.15vh;
-    left: 0.24vw;
-    width: 1.12vw;
-    height: 2.4vh;
-    border-radius: 50%;
-    background: #5d2080;
-    opacity: 0;
-    transition: .2s;
-}
-.radio input:checked + .radio__text:after {
-    opacity: 1;
-}
 
 /*404*/
 .btn404 {
@@ -249,4 +204,21 @@ block{
 #err_msg{
     position: absolute;
     width: 20vw;
+}
+
+/*Создание контракта*/
+#contractName {
+    width: 50%;
+}
+
+.ti1{
+    padding-left: 15px;
+}
+
+.ti2{
+    padding-left: 30px;
+}
+
+.ti3 {
+    padding-left: 45px;
 }

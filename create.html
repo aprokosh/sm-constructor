@@ -16,9 +16,9 @@
 
     <div class="row subpanel">
         <ul id="navbar">
-        <li><a class="current" href="/create">Создать</a></li>
-        <li><a href="/saved">Сохраненные</a></li>
-        <li><a href="/my-contracts">Готовые</a></li>
+            <li><a class="current" href="/create">Создать</a></li>
+            <li><a href="/saved">Сохраненные</a></li>
+            <li><a href="/my-contracts">Готовые</a></li>
             <li><a href="/logout">Выход</a></li>
         </ul>
     </div>
@@ -39,40 +39,70 @@
             <div class="accordeon_block">
                 <h3 class="clickable">Блок #2</h3>
                 <block>
-                    <div class="clickable">Опция#1</div>
-                    <div class="clickable">Опция#2</div>
-                    <div class="clickable">Опция#3</div>
+                    <div class="ownerFunc clickable">Задать значение owner</div>
+                    <div class="valFunc clickable">Задать переменную</div>
+                    <!--div class="mapFunc">Mapping</div-->
                 </block>
             </div>
             <div class="accordeon_block">
                 <h3 class="clickable">Функции</h3>
                 <block>
-                    <div class="fun_option1 clickable">Функция#1 (введите параметры)</div>
-                    <div class="fun_option2 clickable">Функция#2</div>
-                    <div class="fun_option3 clickable">Функция#3</div>
+                    <div class="getFunc clickable">Получить значение</div>
+                    <div class="setFunc clickable">Задать значение</div>
+                    <!--div class="delFunc clickable">Удалить значение</div-->
                 </block>
             </div>
         </div>
-        <div class="col-5 right_col">
+        <div id="yourContract" class="col-5 right_col">
             <h4>Ваш смарт-контракт</h4>
-            <form>
-            <label class="radio">
-                <input name="languages" type="radio" />
-                <div class="radio__text">Язык#1</div>
-            </label>
-            <label class="radio">
-                <input name="languages" type="radio" />
-                <div class="radio__text">Язык#2</div>
-            </label>
-            <label class="radio">
-                <input name="languages" type="radio" />
-                <div class="radio__text">Язык#3</div>
-            </label>
-            </form>
+
+            <!--- версия-->
+            <div id="solidityVersionField">pragma solidity ^
+                <select id="solidityVersion">
+                    <option>0.4.10</option>
+                    <option>0.5.0</option>
+                    <option>0.5.10</option>
+                </select>
+                ;</div>
+
+            <!--основа контракта-->
+            <div id="BaseFirst">contract <input type="text" id="contractName" placeholder="Название контракта" name = "contractName" required> {</div>
+
+            <!--переменные-->
+            <div id="valuesField"></div>
+
+            <!--mapping-->
+            <div id="mappingsField"></div>
+
+            <!--events-->
+            <div id="eventsField"></div>
+
+            <!--functions-->
+            <div id="functionsField"></div>
+
+            <!--последняя часть-->
+            <div id="baseLast">}</div>
+
+            <br>
+
+            <!--form>
+                <label class="radio">
+                    <input name="languages" type="radio" />
+                    <div class="radio__text">Язык#1</div>
+                </label>
+                <label class="radio">
+                    <input name="languages" type="radio" />
+                    <div class="radio__text">Язык#2</div>
+                </label>
+                <label class="radio">
+                    <input name="languages" type="radio" />
+                    <div class="radio__text">Язык#3</div>
+                </label>
+            </form-->
             <form action="/sc-name" method="post" id="form">
-            <label id='name'>Введите название</label><br>
-            <input type='text', name='name' class="form-control sc-name" required><br>
-            <input type='submit', class='btn btn-outline-dark', value=Сохранить>
+                <label id='name'>Введите название</label><br>
+                <input type='text', name='name' class="form-control sc-name" required><br>
+                <input type='submit', class='btn btn-outline-dark', value=Сохранить>
                 <input type='submit', id="loginbtn", class='btn btn-outline-dark', value=Сгенерировать>
             </form>
         </div>
@@ -80,5 +110,6 @@
 </div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 <script src="js/main.js"></script>
+<script src="js/functions.js"></script>
 </body>
 </html>
