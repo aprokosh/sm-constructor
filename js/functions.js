@@ -91,21 +91,20 @@ $('.ownerFunc').click(function () {
     });
 });
 
-//set
-$('.setFunc').click(function () {
+//values
+$('.valFunc').click(function () {
     let qq = '';
     qq += '<div class="push">';
     qq += '<div class="push_head"><h3>Задать значение</h3><img class="cross_image clickable" src="style/img/cross.svg" alt="close"></div>';
     qq += '<div id="setFuncValue" class="push_body">'
-    qq += '<form id="setForm">'
+    qq += '<form id="valForm">'
     qq += '<div>Тип переменной: <input type="text" id="typeName" name = "typeName" required></div><br>';
     qq += '<div>Имя переменной: <input type="text" id="valueName" name = "valueName" required></div>';
-    qq += '<div><input type="checkbox" id="checkOwnerSet" name="checkIt" value="1"> Проверять разрешение</div>'
-    qq += '<input id="setFuncSubmit" class="btn btn-outline-dark submit_param" type="submit" value="Добавить"></form></div>';
+    qq += '<input id="valFuncSubmit" class="btn btn-outline-dark submit_param" type="submit" value="Добавить"></form></div>';
     document.getElementById('parameters').innerHTML = qq;
 
 
-    $('#setForm').submit(function (event) {
+    $('#valForm').submit(function (event) {
         event.preventDefault();
         const tN = document.querySelector('#typeName')
         let typeName = tN.value;
@@ -113,14 +112,9 @@ $('.setFunc').click(function () {
         let valueName = vN.value;
 
         let code = '<div><img class="cross_image funcBlock clickable" src="style/img/cross.svg" alt="close">';
-        code += '<div class="ti1">function set(<span>' + typeName +'</span> <span>' + valueName + '</span>) public {</div>'
-        let checkOwner =document.getElementById('checkOwnerSet');
-        if(checkOwner.checked===true)
-            code += '<div class="ti2">require (msg.sender==owner)</div>'
-        code += '<div class="ti2">data = ' + valueName + ';</div>';
-        code += '<div class="ti1">}</div></div></div>';
+        code += '<div class="ti2">' + typeName + ' ' + valueName + ';</div></div>';
 
-        document.getElementById('functionsField').innerHTML += code;
+        document.getElementById('valuesField').innerHTML += code;
         //$.post('/tasks', { name: name, description: description, deadline: deadline})
     });
 });
