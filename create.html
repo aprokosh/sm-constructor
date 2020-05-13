@@ -28,14 +28,13 @@
         <div class="col-5 left_col">
             <h4>Выберите составляющие</h4>
             <div id="parameters"></div>
-            <!--div class="accordeon_block">
-                <h3 class="clickable">Блок #1</h3>
+            <div class="accordeon_block">
+                <h3 class="clickable">Основное</h3>
                 <block>
-                    <div class="clickable">Опция#1</div>
-                    <div class="clickable">Опция#2</div>
-                    <div class="clickable">Опция#3</div>
+                    <div class="versionFunc clickable">Версия Solidity</div>
+                    <div class="bodyFunc clickable">Тело контракта</div>
                 </block>
-            </div-->
+            </div>
             <div class="accordeon_block">
                 <h3 class="clickable">Переменные</h3>
                 <block>
@@ -53,37 +52,32 @@
                 </block>
             </div>
         </div>
-        <div id="yourContract" class="col-5 right_col">
+        <div class="col-5 right_col">
+
             <h4>Ваш смарт-контракт</h4>
+            <div id="yourContract">
+                <!--- версия-->
+                <div id="solidityVersionField"></div>
 
-            <!--- версия-->
-            <div id="solidityVersionField">pragma solidity ^
-                <select id="solidityVersion">
-                    <option>0.4.10</option>
-                    <option>0.5.0</option>
-                    <option>0.5.10</option>
-                </select>
-                ;</div>
+                <!--основа контракта-->
+                <div id="baseFirst"></div>
+                <!--переменные-->
+                <div id="valuesField"></div>
 
-            <!--основа контракта-->
-            <div id="BaseFirst">contract <input type="text" id="contractName" placeholder="Название контракта" name = "contractName" required> {</div>
+                <!--mapping-->
+                <div id="mappingsField"></div>
 
-            <!--переменные-->
-            <div id="valuesField"></div>
+                <!--events-->
+                <div id="eventsField"></div>
 
-            <!--mapping-->
-            <div id="mappingsField"></div>
+                <!--functions-->
+                <div id="functionsField"></div>
 
-            <!--events-->
-            <div id="eventsField"></div>
-
-            <!--functions-->
-            <div id="functionsField"></div>
-
-            <!--последняя часть-->
-            <div id="baseLast">}</div>
-
+                <!--последняя часть-->
+                <div id="baseLast"></div>
+            </div>
             <br>
+            <div id="error_message"></div>
 
             <!--form>
                 <label class="radio">
@@ -99,17 +93,13 @@
                     <div class="radio__text">Язык#3</div>
                 </label>
             </form-->
-            <form action="/sc-name" method="post" id="form">
-                <!--label id='name'>Введите название</label><br>
-                <input type='text', name='name' class="form-control sc-name" required><br-->
-                <input type='submit', class='btn btn-outline-dark', value=Сохранить>
-                <input type='submit', id="loginbtn", class='btn btn-outline-dark', value=Сгенерировать>
-            </form>
+            <input id="generateContract" type='submit' class='btn btn-outline-dark' value='Сохранить проект и перейти к редактору'>
         </div>
     </div>
 </div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 <script src="js/main.js"></script>
 <script src="js/functions.js"></script>
+<script src="js/redactor.js"></script>
 </body>
 </html>
