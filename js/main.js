@@ -13,16 +13,9 @@ $('.accordeon_block h3').click(function () {
 
 $(document).on('click', '.cross_image', function(){
     $(this).parent().parent().toggleClass('deleteIt')
-    $("div.deleteIt").remove()
+   $("div.deleteIt").remove()
 
 });
-
-$('#yourContract').on('click', '.cross_image', function(){
-    $(this).parent().toggleClass('deletedBlock');
-    $("div.deletedBlock").remove()
-
-});
-
 
 //получить сообщение об ошбке
 function getErr(){

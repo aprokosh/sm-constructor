@@ -1,26 +1,22 @@
-$("#generateContractForm").submit(function(event){
+$("#saveContract").click(function(event){
     event.preventDefault();
     let contractName = document.getElementById('contractName').value;
     let contractCode = document.getElementById('yourContract').innerHTML;
-
-    let contractText = document.getElementById('yourContract').outerHTML;
-    let contract1 = document.getElementById('yourContract').innerText;
-    let contract2 = document.getElementById('yourContract').outerText;
-    document.getElementById('functionsField').innerHTML = contractCode;
-    document.getElementById('functionsField').innerHTML += contractText;
-    document.getElementById('functionsField').innerHTML += contract1;
-    document.getElementById('functionsField').innerHTML += contract2;
-    //$.post('/save', { name: contractName, htmlCodeOfContract: contractCode});
-
-
+    $.post('/save', { name: contractName, htmlCodeOfContract: contractCode});
 });
 
-/*форма с редактором кода
-$("#айдиформы").submit(function(event){
+
+//форма с редактором кода
+$("#generateContract").click(function(event){
     event.preventDefault();
+    let contractText = document.getElementById('yourContract').textContent;
+    let contractCode = document.getElementById('yourContract').innerHTML;
+    let code = '<h4>Редактор кода</h4><div class="redactor">';
+    code += contractCode;
+    code += '</div>';
 
-    let contractText = document.getElementById('#yourContract').innerHTML;
-    $.post('/save', { textCodeOfContract: contractText});
-
+    document.getElementById('inputRedactorHere').innerHTML = code;
 });
-*/
+
+//кнопка у редактора
+//$.post('/save', { textCodeOfContract: contractText});

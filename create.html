@@ -25,81 +25,74 @@
     <div class="row main"><div class="col-2"></div><div class="col-8"><h2>Создание смарт-контракта</h2></div></div>
     <div class="row main">
         <div class="col-1"></div>
-        <div class="col-5 left_col">
-            <h4>Выберите составляющие</h4>
-            <div id="parameters"></div>
+        <div class="col-4 left_col">
+            <h4>Выберите необходимые типы данных</h4>
             <div class="accordeon_block">
-                <h3 class="clickable">Основное</h3>
+                <h3>Добавить</h3>
                 <block>
-                    <div class="versionFunc clickable">Версия Solidity</div>
-                    <div class="bodyFunc clickable">Тело контракта</div>
-                </block>
-            </div>
-            <div class="accordeon_block">
-                <h3 class="clickable">Переменные</h3>
-                <block>
-                    <div class="ownerFunc clickable">Задать значение owner</div>
-                    <div class="valFunc clickable">Задать переменную</div>
-                    <!--div class="mapFunc">Mapping</div-->
-                </block>
-            </div>
-            <div class="accordeon_block">
-                <h3 class="clickable">Функции</h3>
-                <block>
-                    <div class="getFunc clickable">Получить значение</div>
-                    <div class="setFunc clickable">Задать значение</div>
-                    <!--div class="delFunc clickable">Удалить значение</div-->
+                    <div><form action="/selectTypes" id="setTypeForm">
+                        <div>Тип ключа:
+                            <select id="selectKeyType">
+                                <option>int</option>
+                                <option>uint</option>
+                                <option>string</option>
+                                <option>address</option>
+                            </select></div><br>
+                        <div>Тип переменной:
+                            <select id="selectVarType">
+                                <option>int</option>
+                                <option>uint</option>
+                                <option>string</option>
+                                <option>address</option>
+                                <option>bool</option>
+                            </select><input class="btn btn-outline-dark submitType" type="submit" value="Добавить">
+                        </div>
+                    </form></div>
                 </block>
             </div>
         </div>
-        <div class="col-5 right_col">
+            <div class="col-6 right_col">
+                <h4>Ваш смарт-контракт</h4>
+                <div id="yourContract">
+                    <!--- версия-->
+                    <div id="solidityVersionField"></div>
 
-            <h4>Ваш смарт-контракт</h4>
-            <div id="yourContract">
-                <!--- версия-->
-                <div id="solidityVersionField"></div>
+                    <!--основа контракта-->
+                    <div id="baseFirst"></div>
+                    <!--переменные-->
+                    <div id="valuesField"></div>
 
-                <!--основа контракта-->
-                <div id="baseFirst"></div>
-                <!--переменные-->
-                <div id="valuesField"></div>
+                    <!--mapping-->
+                    <div id="mappingsField"></div>
 
-                <!--mapping-->
-                <div id="mappingsField"></div>
+                    <!--events-->
+                    <div id="eventsField"></div>
 
-                <!--events-->
-                <div id="eventsField"></div>
+                    <!--functions-->
+                    <div id="functionsField"></div>
 
-                <!--functions-->
-                <div id="functionsField"></div>
+                    <!--последняя часть-->
+                    <div id="baseLast"></div>
+                </div>
+                <br>
+                <div id="error_message"></div>
 
-                <!--последняя часть-->
-                <div id="baseLast"></div>
+                <button id="saveContract" type='submit' class='btn btn-outline-dark'>Сохранить проект</button>
+                <button id="generateContract" type='submit' class='btn btn-outline-dark'>Перенести в редактор</button>
             </div>
-            <br>
-            <div id="error_message"></div>
-
-            <!--form>
-                <label class="radio">
-                    <input name="languages" type="radio" />
-                    <div class="radio__text">Язык#1</div>
-                </label>
-                <label class="radio">
-                    <input name="languages" type="radio" />
-                    <div class="radio__text">Язык#2</div>
-                </label>
-                <label class="radio">
-                    <input name="languages" type="radio" />
-                    <div class="radio__text">Язык#3</div>
-                </label>
-            </form-->
-            <input id="generateContract" type='submit' class='btn btn-outline-dark' value='Сохранить проект и перейти к редактору'>
+            <div class="col-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10" id="inputRedactorHere">
+            </div>
+            <div class="col-1"></div>
         </div>
     </div>
 </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-<script src="js/main.js"></script>
-<script src="js/functions.js"></script>
-<script src="js/redactor.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script src="js/main.js"></script>
+    <script src="js/createBlock.js"></script>
+    <script src="js/redactor.js"></script>
 </body>
 </html>
