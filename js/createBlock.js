@@ -1,10 +1,3 @@
-function getFormBody(stringHead) {
-    str = '<div class="push">';
-    str += '<div class="push_head"><h3>' + stringHead + '</h3><img class="cross_image clickable" src="style/img/cross.svg" alt="close"></div>';
-    str += '<div class="push_body">';
-    return str;
-}
-
 //get
 $('#setTypeForm').submit(function (event) {
     event.preventDefault();
@@ -20,7 +13,7 @@ $('#setTypeForm').submit(function (event) {
     code += '<h3 class="clickable">' + keyType + ' => ' + varType + '</h3>'
     code += '<block>'
     code += '<div class="containerForGet"><button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id="getBut" type="submit" value="getBut">Настроить Get</button></div>';
-    code += '<br><div class="containerForSet"><button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id=setBut" type="submit" value="setBut">Настроить Set</button></div>';
+    code += '<br><div class="containerForSet"><button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id="setBut" type="submit" value="setBut">Настроить Set</button></div>';
     code += '<br><div class="containerForDelete"><button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id=deleteBut" type="submit" value="deleteBut">Настроить Delete</button></div>';
     code += '</block></div>';
     document.getElementById('yourContract').innerHTML += code;
@@ -40,13 +33,13 @@ function pressBut(that){
     qq += '<div class="push_head"><h3>Настройка метода</h3><img class="cross_image clickable" src="style/img/cross.svg" alt="close"></div>';
     qq += '<div class="push_body">';
     if (that.id === 'getBut') {
-        qq += '<div><form id="formCheckingGet"><input type="checkbox" id="checkOwnerGet" name="checkIt"> Проверять разрешение';
+        qq += '<div><form id="formCheckingGet"><input type="checkbox" id="checkOwnerGet" name="checkIt"> Проверять разрешение Get';
         qq += '<input class="btn btn-outline-dark submitType"  type="submit" value="OK"></form></div>';
-    } else if(that.id==='setBut'){
-        qq += '<div><form id="formCheckingSet"><input type="checkbox" id="checkOwnerSet" name="checkIt"> Проверять разрешение';
+    } else if (that.id === 'setBut'){
+        qq += '<div><form id="formCheckingSet"><input type="checkbox" id="checkOwnerSet" name="checkIt"> Проверять разрешение Set';
         qq += '<input class="btn btn-outline-dark submitType" type="submit" value="OK"></form></div>';
     } else {
-        qq += '<div><form id="formCheckingDelete"><input type="checkbox" id="checkOwnerDelete" name="checkIt"> Проверять разрешение';
+        qq += '<div><form id="formCheckingDelete"><input type="checkbox" id="checkOwnerDelete" name="checkIt"> Проверять разрешение Delete';
         qq += '<input class="btn btn-outline-dark submitType" type="submit" value="OK"></form></div>';
     }
     qq += '</div></div>';
@@ -134,106 +127,3 @@ function pressAntiBut(that) {
         $(that).parent().html(innerCode);
     }
 }
-//owner
-$('.ownerFunc').click(function () {
-    let qq = getFormBody("Задать значение owner");
-    qq += '<form id="ownerFuncForm">';
-    qq += '<input type="radio" id="sender" name="whoIsOwner" value="sender" checked>';
-    qq += '<label for="sender"> Автор запроса</label><br>';
-    qq += '<input type="radio" id="own" name="whoIsOwner" value="own">';
-    qq += '<input type="text" id="ownerAddress" placeholder="Адрес владельца" name = "ownerAddress">';
-    qq += '<input class="btn btn-outline-dark submit_param" type="submit" value="Добавить"></form></div>';
-
-    document.getElementById('parameters').innerHTML += qq;
-
-
-    $('#ownerFuncForm').submit(function (event) {
-        event.preventDefault();
-
-        let code = '<div><img class="cross_image funcBlock clickable" src="style/img/cross.svg" alt="close">';
-        code += '<div class="ti1">adress owner</div>'
-        code += '<div class="ti1">constructor () public {</div>'
-        let whoOwns = document.getElementsByName('whoIsOwner');
-        if(whoOwns[0].checked)
-            code += '<div class="ti2">owner = msg.sender;</div>'
-        else if (whoOwns[1].checked) {
-            let ownerAddr = document.getElementById('ownerAddress').value;
-            if(ownerAddr === '') ownerAddr = 'msg.sender';
-            code += '<div class="ti2">owner = ' + ownerAddr +'</div>';
-        }
-        code += '<div class="ti1">}</div></div></div>';
-
-        document.getElementById('valuesField').innerHTML += code;
-    });
-});
-
-
-//values
-$('.valFunc').click(function () {
-    let qq = getFormBody("Ввести переменную");
-    qq += '<form id="valForm">'
-    qq += '<div>Тип переменной: <input type="text" id="typeName" name = "typeName" required></div><br>';
-    qq += '<div>Имя переменной: <input type="text" id="valueName" name = "valueName" required></div>';
-    qq += '<input class="btn btn-outline-dark submit_param" type="submit" value="Добавить"></form></div>';
-    document.getElementById('parameters').innerHTML = qq;
-
-
-    $('#valForm').submit(function (event) {
-        event.preventDefault();
-        const typeName = document.querySelector('#typeName').value;
-        const valueName = document.querySelector('#valueName').value;
-
-        let code = '<div><img class="cross_image funcBlock clickable" src="style/img/cross.svg" alt="close">';
-        code += '<div class="ti2">' + typeName + ' ' + valueName + ';</div></div>';
-
-        document.getElementById('valuesField').innerHTML += code;
-        //$.post('/tasks', { name: name, description: description, deadline: deadline})
-    });
-});
-
-
-//version
-$('.versionFunc').click(function () {
-    let qq = getFormBody("Выберите версию Solidity");
-    qq += '<form id="versForm">';
-    qq += '<select id="solidityVersion"><option>0.4.10</option><option>0.5.0</option><option>0.5.10</option></select>';
-    qq += '<input class="btn btn-outline-dark submit_param" type="submit" value="Добавить"></form></div>';
-    document.getElementById('parameters').innerHTML = qq;
-
-
-    $('#versForm').submit(function (event) {
-        event.preventDefault();
-
-        var selectedVersion = document.getElementById('solidityVersion').selectedIndex;
-        var options = document.getElementById('solidityVersion').options;
-
-        let code = '<div><img class="cross_image funcBlock clickable" src="style/img/cross.svg" alt="close">';
-        code += '<div>pragma solidity ^' + options[selectedVersion].value + ';</div>'
-        document.getElementById('solidityVersionField').innerHTML = code;
-    });
-});
-
-
-//contract body
-$('.bodyFunc').click(function () {
-    let qq = getFormBody("Создать основу контракта");
-    qq += '<form id="contractBodyForm">';
-    qq += '<input type="text" id="contractName" placeholder="Название (латиница, цифры)" name = "contractName" pattern="[A-Za-z0-9]{1,15}" required>';
-    qq += '<input class="btn btn-outline-dark submit_param" type="submit" value="Добавить"></form></div>';
-
-    document.getElementById('parameters').innerHTML += qq;
-
-
-    $('#contractBodyForm').submit(function (event) {
-        event.preventDefault();
-
-        let contractName = document.getElementById('contractName').value;
-        let code = '<div><img class="cross_image funcBlock clickable" src="style/img/cross.svg" alt="close">';
-        code += '<div> contract ' + contractName + '{</div>'
-
-        document.getElementById('baseFirst').innerHTML += code;
-
-        let finCode = '<div><img class="cross_image funcBlock clickable" src="style/img/cross.svg" alt="close"><div>}</div></div>'
-        document.getElementById('baseLast').innerHTML += finCode;
-    });
-});
