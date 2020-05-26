@@ -25,12 +25,12 @@
     <div class="row main"><div class="col-2"></div><div class="col-8"><h2>Создание смарт-контракта</h2></div></div>
     <div class="row main">
         <div class="col-1"></div>
-        <div class="col-4 left_col">
+        <div class="col-5 left_col">
             <h4>Выберите необходимые типы данных</h4>
             <div class="accordeon_block">
-                <h3>Добавить</h3>
+                <h3 class="clickable">Добавить</h3>
                 <block>
-                    <div><form action="/selectTypes" id="setTypeForm">
+                    <div><form id="setTypeForm">
                         <div>Тип ключа:
                             <select id="selectKeyType">
                                 <option>int</option>
@@ -51,41 +51,26 @@
                 </block>
             </div>
         </div>
-            <div class="col-6 right_col">
+            <div class="col-5 right_col">
                 <h4>Ваш смарт-контракт</h4>
-                <div id="yourContract">
-                    <!--- версия-->
-                    <div id="solidityVersionField"></div>
-
-                    <!--основа контракта-->
-                    <div id="baseFirst"></div>
-                    <!--переменные-->
-                    <div id="valuesField"></div>
-
-                    <!--mapping-->
-                    <div id="mappingsField"></div>
-
-                    <!--events-->
-                    <div id="eventsField"></div>
-
-                    <!--functions-->
-                    <div id="functionsField"></div>
-
-                    <!--последняя часть-->
-                    <div id="baseLast"></div>
-                </div>
+                <div id="yourContract"></div>
                 <br>
                 <div id="error_message"></div>
+                <div id="placeForQuestionBlock"></div>
 
-                <button id="saveContract" type='submit' class='btn btn-outline-dark'>Сохранить проект</button>
-                <button id="generateContract" type='submit' class='btn btn-outline-dark'>Перенести в редактор</button>
+                <div class="languageButtons">
+                <button id="generateEth" type='submit' onclick="getQuestions(this)" class='btn btn-outline-dark'>Ethereum</button>
+                <button id="generateHLF" type='submit' onclick="getQuestions(this)" class='btn btn-outline-dark'>Hyperledger Fabric</button>
+                <button id="saveAsProject" type='submit' onclick="saveProject(this)" class='btn btn-outline-dark'>Сохранить как проект</button>
+                </div>
             </div>
             <div class="col-1"></div>
         </div>
+    <br><br>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-10" id="inputRedactorHere">
-            </div>
+
+            <div class="col-10" id="inputRedactorHere"></div>
             <div class="col-1"></div>
         </div>
     </div>
@@ -93,6 +78,8 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
     <script src="js/main.js"></script>
     <script src="js/createBlock.js"></script>
-    <script src="js/redactor.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/generatorEth.js"></script>
+    <script src="js/generatorHLF.js"></script>
 </body>
 </html>

@@ -83,6 +83,10 @@
     border-right: 1vh solid #5d2080;
 }
 
+h2, .languageButtons{
+    text-align: center;
+}
+
 h4{
     font-size: 9vh;
     padding-bottom: 5vh;
@@ -116,11 +120,6 @@ h4{
     position: absolute;
     top: 5px;
     right: 5px;
-}
-
-.cross_image.funcBlock{
-    position: relative;
-    left: 90%;
 }
 
 .push_body{
@@ -218,11 +217,33 @@ block{
     padding-left: 30px;
 }
 
+.ati1{
+    padding-right: 15px;
+}
+
 .ti3 {
     padding-left: 45px;
 }
 
-.redactor{
+#questionBlock.push{
+    position: absolute;
+    left: -25%;
+    top: -4px;
+    width: 700px;
+}
+
+.cross_image.blockRemovingCross, .newCrossImage{
+    position: relative;
+}
+
+.newCrossImage{
+    display: inline-block;
+    left: 95%;
+    width: 3.5vh;
+}
+
+#codeBlock{
     background-color: black;
     color: white;
+    padding: 30px;
 }

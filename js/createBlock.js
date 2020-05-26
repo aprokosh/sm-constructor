@@ -9,8 +9,8 @@ $('#setTypeForm').submit(function (event) {
     var varOptions = document.getElementById('selectVarType').options;
     varType = varOptions[selectedVar].value;
 
-    let code = '<div class="accordeon_block"><div class="isChecking"></div>';
-    code += '<h3 class="clickable">' + keyType + ' => ' + varType + '</h3>'
+    let code = '<div class="accordeon_block" data-type = "' + keyType + '_' + varType + '" data-typeOfKey ="' + keyType + '" data-typeOfVar = "' + varType + '", data-get="", data-set="", data-delete=""><div class="isChecking"></div>';
+    code += '<h3 class="clickable"><img class="cross_image clickable blockRemovingCross" src="style/img/cross.svg" alt="close"><span class="ti1">' + keyType + ' => ' + varType + '</span></h3>'
     code += '<block>'
     code += '<div class="containerForGet"><button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id="getBut" type="submit" value="getBut">Настроить Get</button></div>';
     code += '<br><div class="containerForSet"><button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id="setBut" type="submit" value="setBut">Настроить Set</button></div>';
@@ -18,11 +18,11 @@ $('#setTypeForm').submit(function (event) {
     code += '</block></div>';
     document.getElementById('yourContract').innerHTML += code;
 
-    $('.accordeon_block h3').click(function () {
-        if (!$(this).parent().find('block').is(':visible')) {
-            $(this).parent().find('block').show(200)
+    $('.accordeon_block h3 span').click(function () {
+        if (!$(this).parent().parent().find('block').is(':visible')) {
+            $(this).parent().parent().find('block').show(200)
         } else {
-            $(this).parent().find('block').hide(200)
+            $(this).parent().parent().find('block').hide(200)
         }
     });
 });
@@ -51,11 +51,11 @@ function pressBut(that){
         let isCheck = document.getElementById('checkOwnerGet');
         parentOfThat = $(that).parent()
         if (isCheck.checked === true) {
-            $(that).parent().parent().parent().addClass("getMethodAth");
+            $(that).parent().parent().parent().data('get', "close").attr('data-get', "close");
             let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressAntiBut(this)" id="getAntiBut" type="submit">Отменить Get</button><span class="ti2">Доступно автору</span></div>';
             $(that).parent().parent().parent().find('.containerForGet').html(innerCode);
         } else {
-            $(that).parent().parent().parent().addClass("getMethod");
+            $(that).parent().parent().parent().data('get', "open").attr('data-get', "open");
             let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressAntiBut(this)" id="getAntiBut" type="submit">Отменить Get</button><span class="ti2">Доступно всем</span></div>';
             $(that).parent().parent().parent().find('.containerForGet').html(innerCode);
         }
@@ -68,11 +68,11 @@ function pressBut(that){
         let isCheck = document.getElementById('checkOwnerSet');
         parentOfThat = $(that).parent()
         if (isCheck.checked === true) {
-            $(that).parent().parent().parent().addClass("setMethodAth");
+            $(that).parent().parent().parent().data('set', "close").attr('data-set', "close");
             let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressAntiBut(this)" id="setAntiBut" type="submit">Отменить Set</button><span class="ti2">Доступно автору</span></div>';
             $(that).parent().parent().parent().find('.containerForSet').html(innerCode);
         } else {
-            $(that).parent().parent().parent().addClass("setMethod");
+            $(that).parent().parent().parent().data('set', "open").attr('data-set', "open");
             let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressAntiBut(this)" id="setAntiBut" type="submit">Отменить Set</button><span class="ti2">Доступно всем</span></div>';
             $(that).parent().parent().parent().find('.containerForSet').html(innerCode);
         }
@@ -85,11 +85,11 @@ function pressBut(that){
         let isCheck = document.getElementById('checkOwnerDelete');
         parentOfThat = $(that).parent()
         if (isCheck.checked === true) {
-            $(that).parent().parent().parent().addClass("deleteMethodAth");
+            $(that).parent().parent().parent().data('delete', "close").attr('data-delete', "close");
             let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressAntiBut(this)" id="deleteAntiBut" type="submit">Отменить Delete</button><span class="ti2">Доступно автору</span></div>';
             $(that).parent().parent().parent().find('.containerForDelete').html(innerCode);
         } else {
-            $(that).parent().parent().parent().addClass("deleteMethod");
+            $(that).parent().parent().parent().data('delete', "open").attr('data-delete', "open");
             let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressAntiBut(this)" id="deleteAntiBut" type="submit">Отменить Delete</button><span class="ti2">Доступно всем</span></div>';
             $(that).parent().parent().parent().find('.containerForDelete').html(innerCode);
         }
@@ -101,27 +101,21 @@ function pressBut(that){
 function pressAntiBut(that) {
     event.preventDefault();
     if (that.id === 'getAntiBut') {
-        if ($(that).parent().parent().parent().hasClass("getMethodAth"))
-            $(that).parent().parent().parent().removeClass("getMethodAth");
-        else $(that).parent().parent().parent().removeClass("getMethod");
+        $(that).parent().parent().parent().data('get', "").attr('data-get', "");
 
         let innerCode = '<button class="btn btn-outline-dark submitType methodButton"onclick="pressBut(this)" id="getBut" type="submit">Настроить Get</button>';
         $(that).parent().html(innerCode);
     }
 
     if (that.id === 'setAntiBut') {
-        if ($(that).parent().parent().parent().hasClass("setMethodAth"))
-            $(that).parent().parent().parent().removeClass("setMethodAth");
-       else $(that).parent().parent().parent().removeClass("getMethod");
+        $(that).parent().parent().parent().data('set', "").attr('data-set', "");
 
         let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id=setBut" type="submit">Настроить Set</button>';
         $(that).parent().html(innerCode);
     }
 
     if (that.id === 'deleteAntiBut') {
-        if ($(that).parent().parent().parent().hasClass("deleteMethodAth"))
-            $(that).parent().parent().parent().removeClass("deleteMethodAth");
-        else $(that).parent().parent().parent().removeClass("deleteMethod");
+            $(that).parent().parent().parent().data('delete', "").attr('data-delete', "");
 
         let innerCode = '<button class="btn btn-outline-dark submitType methodButton" onclick="pressBut(this)" id=deleteBut" type="submit">Настроить Delete</button>';
         $(that).parent().html(innerCode);
