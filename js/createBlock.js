@@ -3,11 +3,17 @@ $('#setTypeForm').submit(function (event) {
     event.preventDefault();
     var selectedKey = document.getElementById('selectKeyType').selectedIndex;
     var keyOptions = document.getElementById('selectKeyType').options;
-    keyType = keyOptions[selectedKey].value;
+    let keyType = keyOptions[selectedKey].value;
+    if (keyType === "float (Go)") keyType = "float";
+    if (keyType === "address (Solidity)") keyType = "address";
+
 
     var selectedVar = document.getElementById('selectVarType').selectedIndex;
     var varOptions = document.getElementById('selectVarType').options;
-    varType = varOptions[selectedVar].value;
+    let varType = varOptions[selectedVar].value;
+    if (varType === "float (Go)") varType = "float";
+    if (varType === "address (Solidity)") varType = "address";
+
 
     let code = '<div class="accordeon_block dataTypeBlock" data-type = "' + keyType + '_' + varType + '" data-typeOfKey ="' + keyType + '" data-typeOfVar = "' + varType + '", data-get="", data-set="", data-delete=""><div class="isChecking"></div>';
     code += '<h3 class="clickable"><img class="cross_image clickable blockRemovingCross" src="style/img/cross.svg" alt="close"><span class="ti1">' + keyType + ' => ' + varType + '</span></h3>'
@@ -136,10 +142,14 @@ $('#setStructure').submit( function(event){
 
         var index = document.getElementById(idType).options.selectedIndex;
         structTypes.push(document.getElementById(idType).options[index].text);
+        if (structTypes[i-1] === "float (Go)") structTypes[i-1] = "float";
+        if (structTypes[i-1] === "address (Solidity)") structTypes[i-1] = "address";
     }
     let structName = document.getElementById('structName').value;
     var index = document.getElementById('structKeyType').options.selectedIndex;
     let structKey = document.getElementById('structKeyType').options[index].text;
+    if (structKey === "float (Go)") structKey = "float";
+    if (structKey === "address (Solidity)") structKey = "address";
     let code = '';
 
     code += '<div class="accordeon_block dataTypeBlock" data-type = "' + structKey + '_' + structName + '" data-typeOfKey ="' + structKey + '" data-typeOfVar = "' + structName + '", data-get="", data-set="", data-delete="", data-isstruct="yes"><div class="isChecking"></div>';
@@ -172,7 +182,7 @@ $('#setStructure').submit( function(event){
 
     document.getElementById('addMoreItems').className = '1';
     let newItem = '<div><span><select class="structKeyPlace" id="varType_1">';
-    newItem += '<option>int</option><option>uint</option><option>string</option><option>address</option></select></span>';
-    newItem += '<span><input type="text" id="varName_1" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z0-9]{1,15}" required></span></div><br>';
+    newItem += '<option>int</option><option>uint</option><option>string</option><option>float (Go)</option><option>address (Solidity)</option><option>bool</option></select></span>';
+    newItem += '<span><input type="text" id="varName_1" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required></span></div><br>';
     document.getElementById('addMoreItems').innerHTML = newItem;
 });

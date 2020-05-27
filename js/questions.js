@@ -11,14 +11,13 @@ function getVariablesList(that){
     return str;
 }
 
-function getQuestions(that) {
+function getQuestionsEth(that) {
     $(document).find('block').hide(200)
     let newBlock = '<div id="questionBlock" class="push">';
     newBlock += '<div class="push_head"><img class="cross_image clickable" src="style/img/cross.svg" alt="close">';
-    if (that.id==='generateEth')
-        newBlock += '<h3 id="platformName" data-pl="Eth">Ethereum. ';
-    else newBlock += '<h3  id="platformName" data-pl="HLF">Hyperledger Fabric. ';
+    newBlock += '<h3>Ethereum. ';
     newBlock += 'Введите дополнительные параметры</h3></div>';
+
     newBlock += '<div class="push_body"><form id="questionForm">';
     newBlock += '<div>Названия могут включать только латинские буквы и/или цифры.</div><br>'
     newBlock += '<div>Введите название контракта: <span class="ti1"><input type="text" id="contractName" placeholder="Название контракта" name = "contractName" pattern="[A-Za-z0-9]{1,15}" required></span></div>'
@@ -36,7 +35,6 @@ function getQuestions(that) {
 
         $(document).find('block').hide(200)
 
-        let platformName = document.getElementById('platformName').dataset.pl;
         let blockList = document.querySelectorAll('#yourContract div.dataTypeBlock');
         let structList = document.querySelectorAll('#yourContract div.structureBlock');
         let contractName = document.getElementById('contractName').value;
@@ -52,19 +50,38 @@ function getQuestions(that) {
         $(this).parent().parent().toggleClass('deleteIt')
         $("div.deleteIt").remove()
 
-        if (platformName === 'Eth') generateEth(contractName, blockList, varNames, structList, version);
-        else generateHLF(contractName, blockList, varNames, structList);
+        generateEth(contractName, blockList, varNames, structList, version);
     });
 }
 
 
 
+function getQuestionsHLF(that) {
+    $(document).find('block').hide(200)
+    let newBlock = '<div id="questionBlock" class="push">';
+    newBlock += '<div class="push_head"><img class="cross_image clickable" src="style/img/cross.svg" alt="close">';
+    newBlock += '<h3>Hyperledger Fabric. ';
+    newBlock += 'Введите дополнительные параметры</h3></div>';
 
-/*
-function saveProject(that) {
-    let newBlock = '<div id="questionBlock", class="push">'+
-        '<div class="push_head"><h3>Сохранение. Введите название проекта</h3><img class="cross_image clickable" src="style/img/cross.svg" alt="close"></div>' +
-        '<div class="push_body">лаолдыа</div>';
+    newBlock += '<div class="push_body"><form id="questionForm">';
+    newBlock += '<div>Название может включать только латинские буквы и/или цифры.</div><br>'
+    newBlock += '<div>Введите название контракта: <span class="ti1"><input type="text" id="contractName" placeholder="Название контракта" name = "contractName" pattern="[A-Za-z0-9]{1,15}" required></span></div>'
+    newBlock += '<br> <input class="btn btn-outline-dark submitType" type="submit" value="Сгенерировать"></form></div></div>'
 
     document.getElementById('placeForQuestionBlock').innerHTML = newBlock;
-}*/
+
+    $('#questionForm').submit(function (event) {
+        event.preventDefault();
+
+        $(document).find('block').hide(200);
+
+        let blockList = document.querySelectorAll('#yourContract div.dataTypeBlock');
+        let structList = document.querySelectorAll('#yourContract div.structureBlock');
+        let contractName = document.getElementById('contractName').value;
+
+        $(this).parent().parent().toggleClass('deleteIt')
+        $("div.deleteIt").remove();
+
+        generateHLF(contractName, blockList, structList);
+    });
+}

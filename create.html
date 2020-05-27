@@ -36,14 +36,15 @@
                                 <option>int</option>
                                 <option>uint</option>
                                 <option>string</option>
-                                <option>address</option>
+                                <option>address (Solidity)</option>
                             </select></div><br>
                         <div>Тип переменной:
                             <select id="selectVarType">
                                 <option>int</option>
                                 <option>uint</option>
                                 <option>string</option>
-                                <option>address</option>
+                                <option>float (Go)</option>
+                                <option>address (Solidity)</option>
                                 <option>bool</option>
                             </select><input class="btn btn-outline-dark submitType" type="submit" value="Добавить">
                         </div>
@@ -54,7 +55,7 @@
                 <h3 class="clickable">Определить структуру</h3>
                 <block>
                     <div><form id="setStructure">
-                        <div><input type="text" id="structName" placeholder="Имя структуры" name = "structName" pattern="[A-Za-z0-9]{1,15}" required></div><br>
+                        <div>Используйте цифры и латинские буквы.<br> <input type="text" id="structName" placeholder="Имя структуры" name = "structName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required></div><br>
                         <div id="addMoreItems" class="1">
                             <div>
                                 <span>
@@ -62,11 +63,13 @@
                                         <option>int</option>
                                         <option>uint</option>
                                         <option>string</option>
-                                        <option>address</option>
+                                        <option>float (Go)</option>
+                                        <option>address (Solidity)</option>
+                                        <option>bool</option>
                                     </select>
                                 </span>
                             <span>
-                                <input type="text" id="varName_1" class="structNamePlace" placeholder="Имя переменной" name = "varName" pattern="[A-Za-z0-9]{1,15}" required>
+                                <input type="text" id="varName_1" class="structNamePlace" placeholder="Имя переменной" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required>
                             </span>
                             </div><br>
                         </div>
@@ -76,7 +79,7 @@
                                 <option>int</option>
                                 <option>uint</option>
                                 <option>string</option>
-                                <option>address</option>
+                                <option>address (Solidity)</option>
                             </select>
                         </div><br>
                         <input class="btn btn-outline-dark submitType" type="submit" value="Добавить">
@@ -95,8 +98,8 @@
                 <div id="placeForQuestionBlock"></div>
 
                 <div class="languageButtons">
-                <button id="generateEth" type='submit' onclick="getQuestions(this)" class='btn btn-outline-dark'>Ethereum</button>
-                <button id="generateHLF" type='submit' onclick="getQuestions(this)" class='btn btn-outline-dark'>Hyperledger Fabric</button>
+                <button id="generateEth" type='submit' onclick="getQuestionsEth(this)" class='btn btn-outline-dark'>Ethereum</button>
+                <button id="generateHLF" type='submit' onclick="getQuestionsHLF(this)" class='btn btn-outline-dark'>Hyperledger Fabric</button>
                 <button id="saveAsProject" type='submit' onclick="saveProject(this)" class='btn btn-outline-dark'>Сохранить как проект</button>
                 </div>
             </div>
@@ -121,8 +124,8 @@
             document.getElementById('addMoreItems').className = n;
 
             newItem += '<div><span><select class="structKeyPlace" id="varType_' + n + '">';
-            newItem += '<option>int</option><option>uint</option><option>string</option><option>address</option></select></span>';
-            newItem += '<span><input type="text" id="varName_' + n + '" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z0-9]{1,15}" required></span></div><br>';
+            newItem += '<option>int</option><option>uint</option><option>string</option><option>float (Go)</option><option>address (Solidity)</option><option>bool</option></select></span>';
+            newItem += '<span><input type="text" id="varName_' + n + '" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required></span></div><br>';
             document.getElementById('addMoreItems').innerHTML += newItem;
         }
     </script>

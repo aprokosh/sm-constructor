@@ -1,4 +1,12 @@
 function generateEth (contractName, blockList, varNames, structList, version){
+
+    for (let i=0; i<blockList.length; ++i) {
+        if (blockList[i].dataset.typeofvar === "float") {
+            blockList[i].dataset.typeofvar = "int";
+            blockList[i].dataset.type = blockList[i].dataset.type.replace("float", "int");
+        }
+    }
+
     let code = '<div id="codeBlock">';
     code += '<h2>Код контракта</h2>';
     code += generateEthBase(contractName, version);
@@ -36,6 +44,7 @@ function generateEthStructs(varNames, structList) {
        let types = structList[i].dataset.structtypes.split(',');
        let names = structList[i].dataset.structnames.split(',');
        for (let j = 0; j<k; ++j){
+           if (types[j]==="float") types[j]="int"
            code += '<div class="ti2">' + types[j] + ' ' + names[j] + ';</div>';
        }
        code += '<div class="ti1">}</div><br>';
@@ -66,9 +75,11 @@ function generateEthFunctions(blockList, varNames, structList) {
                     funcCode += EthStructFunc(thisName, thisKeyType, thisVarType, blockList[i], struct);
                 }
             }
-
         }
         else {
+            if (thisKeyType === "string") thisKeyType = "string memory";
+            if (thisVarType === "string") thisVarType = "string memory";
+            else if (thisVarType === "float") thisVarType = "int";
             if (thisGetFunc === "open" || thisGetFunc === "close") funcCode += EthGet(thisName, thisKeyType, thisVarType, thisGetFunc);
             if (thisSetFunc === "open" || thisSetFunc === "close") funcCode += EthSet(thisName, thisKeyType, thisVarType, thisSetFunc);
             if (thisDeleteFunc === "open" || thisDeleteFunc === "close") funcCode += EthDelete(thisName, thisKeyType, thisVarType, thisDeleteFunc);
@@ -87,7 +98,10 @@ function EthStructFunc (name, keyType, varType, block, struct){
     if (keyType === "string") keyType = "string memory";
     let n = struct.dataset.length;
     let types = struct.dataset.structtypes.split(',');
-    for (let i = 0; i<n; ++i) if (types[i]==="string") types[i]="string memory"
+    for (let i = 0; i<n; ++i) {
+        if (types[i]==="string") types[i]="string memory";
+        if (types[i]==="float") types[i]="int"
+    }
     let names = struct.dataset.structnames.split(',');
     if (block.dataset.get === "open" || block.dataset.get === "close"){
         code += '<div class="ti1"> function get_' + name + '(' +  keyType + ' key) public view returns (';
@@ -105,7 +119,7 @@ function EthStructFunc (name, keyType, varType, block, struct){
     if (block.dataset.set === "open" || block.dataset.set === "close"){
         code += '<div class="ti1">function set_' + name + '(' + keyType + ' key';
         for (let i = 0; i<n; ++i)
-            code += ', ' + types[i] + ' arg' + i;
+            code += ', ' + types[i] + ' arg_' + names[i];
         code += ') public {</div>';
         if (block.dataset.set === "close")
             code += '<div class="ti2">require (msg.sender==owner, "Access to set this type is only for owner");</div>'
@@ -129,8 +143,6 @@ function EthStructFunc (name, keyType, varType, block, struct){
  */
 function EthGet(name, keyType, varType, getFunc){
     let getCode = "";
-    if (keyType === "string") keyType = "string memory";
-    if (varType === "string") varType = "string memory";
     getCode += '<div class="ti1">function get_' + name + '(' + keyType + ' key) public view returns (' + varType +') {</div>';
 
     if(getFunc === "close")
@@ -147,8 +159,6 @@ function EthGet(name, keyType, varType, getFunc){
  */
 function EthSet(name, keyType, varType, setFunc){
     let setCode = "";
-    if (keyType === "string") keyType = "string memory";
-    if (varType === "string") varType = "string memory";
     setCode += '<div class="ti1">function set_' + name + '(' + keyType + ' key, ' + varType + ' data) public {</div>';
 
     if(setFunc === "close")
@@ -166,8 +176,6 @@ function EthSet(name, keyType, varType, setFunc){
  */
 function EthDelete(name, keyType, varType, deleteFunc){
     let deleteCode = "";
-    if (keyType === "string") keyType = "string memory";
-    if (varType === "string") varType = "string memory";
     deleteCode += '<div class="ti1">function delete_' + name + '(' + keyType + ' key) public {</div>';
 
     if(deleteFunc === "close")
