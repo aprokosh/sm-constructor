@@ -21,7 +21,6 @@ function generateHLF (contractName, blockList, structList){
     code += generateHLFStructs(structList);
     code += generateHLFBase2(contractName);
     code += generateHLFFunctions(contractName, blockList, structList);
-    code += '<div>}</div>';
     code += '</div>';
 
     document.getElementById('inputRedactorHere').innerHTML = code;
@@ -90,24 +89,21 @@ function generateHLFFunctions(contractName, blockList, structList){
     let addedFuncs = [];
 
     for (let i = 0 ; i<n; ++i){
-        let thisType = blockList[i].dataset.type;
         let thisKeyType = blockList[i].dataset.typeofkey;
         let thisVarType = blockList[i].dataset.typeofvar;
         let thisGetFunc = blockList[i].dataset.get;
         let thisSetFunc = blockList[i].dataset.set;
         let thisDeleteFunc = blockList[i].dataset.delete;
 
-        let check1 = 'get-' + thisGetFunc + '-' + thisKeyType + '-' + thisVarType;
-        let check2 = 'set-' + thisSetFunc + '-' + thisKeyType + '-' + thisVarType;
-        let check3 = 'delete-' + thisDeleteFunc + '-' + thisKeyType + '-' + thisVarType;
+        let check1 = 'get_' + thisGetFunc + '_' + thisKeyType + '_' + thisVarType;
+        let check2 = 'set_' + thisSetFunc + '_' + thisKeyType + '_' + thisVarType;
+        let check3 = 'delete_' + thisDeleteFunc + '_' + thisKeyType + '_' + thisVarType;
 
         let struct = structList[0];
         if (blockList[i].dataset.isstruct === "yes"){
-            for (let j=0; j<structList.length; ++j) {
-                if(structList[j].dataset.structname === blockList[i].dataset.typeofvar) {
+            for (let j=0; j<structList.length; ++j)
+                if(structList[j].dataset.structname === blockList[i].dataset.typeofvar)
                     struct = structList[j];
-                }
-            }
         }
 
         if (addedFuncs.includes(check1)===false && (thisGetFunc === "open" || thisGetFunc === "close")) {
@@ -134,22 +130,21 @@ function generateHLFFunctions(contractName, blockList, structList){
 
 function generateHLFInvoke(contractName, addedFuncs){
     let invoke = "";
-    let call = 'shim.' + contractName + 'StubInterface';
 
     let n = addedFuncs.length;
 
-    invoke += '<div>func (ptr *' + contractName + ') Invoke(stub ' + call + ') peer.Response {</div>';
+    invoke += '<div>func (ptr *' + contractName + ') Invoke(stub shim.ChaincodeStubInterface) peer.Response {</div>';
     invoke += '<div class="ti1">function, args := stub.GetFunctionAndParameters()</div>';
     invoke += '<div class="ti1">switch function {</div>';
 
     for (let i=0; i<n; ++i){
-        invoke += '<div class="ti1">case "' + addedFuncs[i] + '": < /div>';
+        invoke += '<div class="ti1">case "' + addedFuncs[i] + '": </div>';
         invoke += '<div class="ti2">return ' + addedFuncs[i] + '(stub, args)</div>';
     }
 
     invoke += '<div class="ti1">default:</div>';
     invoke += '<div class="ti2">return shim.Error("Invalid function name")</div>';
-    invoke += '<div>}</div>'
+    invoke += '<div>}</div><br>'
 
     return invoke;
 }
@@ -179,34 +174,36 @@ function HLF_get(functionName, contractName, keyType, varType, getFunc){
 
     getCode += '<div>func (t *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) pb.Response ';
     if (getFunc === "close") getCode += 'owner.Only {</div>';
-    else getCode += '{</div>\';'
+    else getCode += '{</div>';
+
     getCode += '<div class="ti1"> var key ' + keyType + '</div>' +
-        '<div class="ti1">var jsonResp string</div>' +
-        '<div class="ti1"> var err error</div>' +
-        '<div class="ti1"> var key ' + keyType + '</div>' +
-        '<div class="ti1"> var data_string ' + string + '</div>' +
-        '<div class="ti1"> var data ' + varType + '</div>';
+                '<div class="ti1">var jsonResp string</div>' +
+                '<div class="ti1"> var err error</div>' +
+                '<div class="ti1"> var key ' + keyType + '</div>' +
+                '<div class="ti1"> var data_string string </div>' +
+                '<div class="ti1"> var data ' + varType + '</div>';
 
     getCode += '<div class="ti1">if len(args) != 1 {</div>' +
-                '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting name of the marble to query")</div>' +
+                '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting 1")</div>' +
                 '<div class="ti1">}</div>';
 
-    let conv = convertingFunc("string", keyType);
-    getCode += '<div class="ti1">key = ' + conv + '(args[0])</div>';
+    let conv = convertingFunc("string", keyType, "args[0]");
+    getCode += '<div class="ti1">key = ' + conv + '</div>';
     getCode += '<div class="ti1">valAsbytes, err := stub.GetState(key)</div>';
     getCode += '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"</div>' +
+        '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "}"</div>' +
         '<div class="ti2">return shim.Error(jsonResp)</div>' +
         '<div class="ti1">} else if valAsbytes == nil {</div>' +
-        '<div class="ti2">jsonResp = "{\"Error\":\"Struct does not exist: " + key + "\"}"</div>' +
+        '<div class="ti2">jsonResp = "{\"Error\":\"Struct does not exist: " + key + "}"</div>' +
         '<div class="ti2">return shim.Error(jsonResp)</div>' +
         '<div class="ti1">}</div>';
+
     getCode += '<div class="ti1">data_string = []string(valAsBytes) </div>';
-    conv = convertingFunc("string", varType);
-    getCode += '<div class="ti1">data = ' + conv + '(data_string)</div>';
+    conv = convertingFunc("string", varType, "data_string");
+    getCode += '<div class="ti1">data = ' + conv + '</div>';
 
     getCode += '<div class="ti1">return shim.Success(data)</div>';
-    getCode += '<div class="ti1">}</div>';
+    getCode += '<div>}</div><br>';
 
     return getCode;
 }
@@ -218,7 +215,7 @@ function HLF_set(functionName, contractName, keyType, varType, setFunc){
 
     setCode += '<div>func (t *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) pb.Response ';
     if (setFunc === "close") setCode += 'owner.Only {</div>';
-    else setCode += '{</div>\';'
+    else setCode += '{</div>';
 
     setCode += '<div class="ti1"> var err error</div>' +
                 '<div class="ti1"> var key ' + keyType + '</div>' +
@@ -228,17 +225,17 @@ function HLF_set(functionName, contractName, keyType, varType, setFunc){
             '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting 2.")</div>' +
             '<div class="ti1">}</div>';
 
-    let conv = convertingFunc("string", keyType);
-    setCode += '<div class="ti1">var key = ' + conv + '(args[0])</div>';
-    conv = convertingFunc("string", varType);
-    setCode += '<div class="ti1">var data = ' + conv + '(args[1])</div>';
+    let conv = convertingFunc("string", keyType, "args[0]");
+    setCode += '<div class="ti1">var key = ' + conv + '</div>';
+    conv = convertingFunc("string", varType, "args[1]");
+    setCode += '<div class="ti1">var data = ' + conv + '</div>';
 
     setCode += '<div class="ti1">err = stub.PutState(key, data)</div>' +
         '<div class="ti1">if err != nil {</div>' +
         '<div class="ti2">return shim.Error(err.Error())</div>' +
         '<div class="ti1">}</div>';
     setCode += '<div class="ti1">return shim.Success(nil)</div>';
-    setCode += '<div>}</div>';
+    setCode += '<div>}</div><br>';
 
     return setCode;
 }
@@ -246,12 +243,12 @@ function HLF_set(functionName, contractName, keyType, varType, setFunc){
 /**
  * @return {string}
  */
-function HLF_delete(functionName, contractName, keyType, varType, deleteFunc){
+function HLF_delete(functionName, contractName, keyType, varType, delFunc){
     let delCode = "";
 
     delCode += '<div>func (t *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) pb.Response ';
     if (delFunc === "close") delCode += 'owner.Only {</div>';
-    else delCode += '{</div>\';'
+    else delCode += '{</div>';
     delCode += '<div class="ti1">var jsonResp string</div>' +
         '<div class="ti1">var key ' + keyType + '</div>';
 
@@ -259,16 +256,16 @@ function HLF_delete(functionName, contractName, keyType, varType, deleteFunc){
         '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting 1")</div>' +
         '<div class="ti1">}</div>';
 
-    let conv = convertingFunc("string", keyType);
-    delCode += '<div class="ti1"> key := ' + conv + '(args[0])</div>';
+    let conv = convertingFunc("string", keyType, "args[0]");
+    delCode += '<div class="ti1"> key := ' + conv + '</div>';
 
     delCode += '<div class="ti1">valAsbytes, err := stub.GetState(key)</div>'
 
     delCode += '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"</div>' +
+        '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "}"</div>' +
         '<div class="ti2">return shim.Error(jsonResp)</div>' +
         '<div class="ti1">} else if valAsbytes == nil {</div>' +
-        '<div class="ti2">jsonResp = "{\"Error\":\"Structure does not exist: " + key + "\"}"</div>' +
+        '<div class="ti2">jsonResp = "{\"Error\":\"Structure does not exist: " + key + "}"</div>' +
         '<div class="ti2">return shim.Error(jsonResp)</div>' +
         '<div class="ti1">}</div>';
 
@@ -278,7 +275,7 @@ function HLF_delete(functionName, contractName, keyType, varType, deleteFunc){
         '<div class="ti1">}</div>';
 
     delCode += '<div class="ti1">return shim.Success(nil)</div>' +
-        '<div>}</div>';
+        '<div>}</div><br>';
     return delCode;
 }
 
@@ -291,30 +288,30 @@ function HLF_structGet(functionName, contractName, keyType, getFunc, struct){
 
     getCode += '<div>func (t *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) pb.Response ';
     if (getFunc === "close") getCode += 'owner.Only {</div>';
-    else getCode += '{</div>\';'
+    else getCode += '{</div>';
     getCode += '<div class="ti1"> var key ' + keyType + '</div>' +
                 '<div class="ti1">var jsonResp string</div>' +
                 '<div class="ti1"> var err error</div>';
 
     getCode += '<div class="ti1">if len(args) != 1 {</div>' +
-                '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting name of the marble to query")</div>' +
+                '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting 1")</div>' +
                 '<div class="ti1">}</div>';
 
-    let conv = convertingFunc("string", keyType);
-    getCode += '<div class="ti1">key = ' + conv + '(args[0])</div>';
+    let conv = convertingFunc("string", keyType, "args[0]");
+    getCode += '<div class="ti1">key = ' + conv + '</div>';
     getCode += '<div class="ti1">valAsbytes, err := stub.GetState(key)</div>';
     getCode += '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"</div>' +
+                '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "}"</div>' +
                 '<div class="ti2">return shim.Error(jsonResp)</div>' +
                 '<div class="ti1">} else if valAsbytes == nil {</div>' +
-                '<div class="ti2">jsonResp = "{\"Error\":\"Struct does not exist: " + key + "\"}"</div>' +
+                '<div class="ti2">jsonResp = "{\"Error\":\"Struct does not exist: " + key + "}"</div>' +
                 '<div class="ti2">return shim.Error(jsonResp)</div>' +
                 '<div class="ti1">}</div>';
     getCode += '<div class="ti1">' + structName + '_JSON := ' + structName + '{}</div>';
     getCode += '<div class="ti1">err = json.Unmarshal(valAsBytes, &' + structName + '_JSON)</div>';
 
-    getCode += '<div class="ti1">return shim.Success([]string' + structName + '_JSON)</div>';
-    getCode += '<div class="ti1">}</div>';
+    getCode += '<div class="ti1">return shim.Success([]string ' + structName + '_JSON)</div>';
+    getCode += '<div class="ti1">}</div><br>';
 
     return getCode;
 }
@@ -322,33 +319,35 @@ function HLF_structGet(functionName, contractName, keyType, getFunc, struct){
 /**
  * @return {string}
  */
-function HLF_structSet(functionName, contractName, keyType, getFunc, struct){
+function HLF_structSet(functionName, contractName, keyType, setFunc, struct){
     let setCode = "";
-    let n = struct.dataset.length
+    let n = struct.dataset.length;
     let structName = struct.dataset.structname;
-    let n_1 = n+1;
+    let n_1 = Number(n)+Number(1);
     let types = struct.dataset.structtypes.split(',');
     for (let j = 0; j<n; ++j) if (types[j]==="address") types[j]="string";
     let names = struct.dataset.structnames.split(',');
 
     setCode += '<div>func (t *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) pb.Response ';
     if (setFunc === "close") setCode += 'owner.Only {</div>';
-    else setCode += '{</div>\';'
+    else setCode += '{</div>';
     setCode += '<div class="ti1"> var err error</div>';
 
     setCode += '<div class="ti1">if len(args) != ' + n_1 + '{</div>' +
-        '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting ' + n + '.")</div>' +
+        '<div class="ti2">return shim.Error("Incorrect number of arguments. Expecting ' + n + '")</div>' +
         '<div class="ti1">}</div>';
 
-    let conv = convertingFunc("string", keyType);
-    setCode += '<div class="ti1">var key = ' + conv + '(args[0])</div>';
-    for (let i=1; i<=n; ++i) {
-        conv = convertingFunc(string, types[i-1]);
-        setCode += '<div class="ti1">var ' + names[i-1] + ' = ' + conv + '(args[' + i + '])</div>';
-}
+    let conv = convertingFunc("string", keyType, "args[0]");
+    setCode += '<div class="ti1">var key = ' + conv + '</div>';
 
-    setCode += '<div class="ti1">objectType := "' + structname + '"</div>';
-    setCode += structName +' := &' + structName + '{objectType, key';
+    for (let i=1; i<=n; ++i) {
+        let argName = 'args[' + i + ']';
+        conv = convertingFunc("string", types[i-1], argName);
+        setCode += '<div class="ti1">var ' + names[i-1] + ' = ' + conv + '</div>';
+    }
+
+    setCode += '<div class="ti1">objectType := "' + structName + '"</div>';
+    setCode += '<div class="ti1">' + structName +' := &' + structName + '{objectType, key';
     for (let i=0; i<n; ++i) setCode += ', ' + names[i];
     setCode += '}</div>';
 
@@ -362,7 +361,7 @@ function HLF_structSet(functionName, contractName, keyType, getFunc, struct){
                 '<div class="ti2">return shim.Error(err.Error())</div>' +
                  '<div class="ti1">}</div>';
     setCode += '<div class="ti1">return shim.Success(nil)</div>';
-    setCode += '<div>}</div>';
+    setCode += '<div>}</div><br>';
 
     return setCode;
 }
@@ -376,7 +375,7 @@ function HLF_structDelete(functionName, contractName, keyType, delFunc, struct){
 
     delCode += '<div>func (t *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) pb.Response ';
     if (delFunc === "close") delCode += 'owner.Only {</div>';
-    else delCode += '{</div>\';'
+    else delCode += '{</div>';
     delCode += '<div class="ti1">var jsonResp string</div>' +
                 '<div class="ti1">var ' + structName + '_JSON ' + structName + '</div>' +
                 '<div class="ti1">var key </div>';
@@ -390,16 +389,16 @@ function HLF_structDelete(functionName, contractName, keyType, delFunc, struct){
     delCode += '<div class="ti1">valAsbytes, err := stub.GetState(key)</div>'
 
     delCode += '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"</div>' +
+                '<div class="ti2">jsonResp = "{\"Error\":\"Failed to get state for " + key + "}"</div>' +
                 '<div class="ti2">return shim.Error(jsonResp)</div>' +
                 '<div class="ti1">} else if valAsbytes == nil {</div>' +
-                '<div class="ti2">jsonResp = "{\"Error\":\"Structure does not exist: " + key + "\"}"</div>' +
+                '<div class="ti2">jsonResp = "{\"Error\":\"Structure does not exist: " + key + "}"</div>' +
                 '<div class="ti2">return shim.Error(jsonResp)</div>' +
                 '<div class="ti1">}</div>';
 
     delCode += '<div class="ti1">err = json.Unmarshal([]byte(valAsbytes), &' + structName + '_JSON)</div>' +
                 '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">jsonResp = "{\"Error\":\"Failed to decode JSON of: " + key + "\"}"</div>' +
+                '<div class="ti2">jsonResp = "{\"Error\":\"Failed to decode JSON of: " + key + "}"</div>' +
                 '<div class="ti2">return shim.Error(jsonResp)</div>' +
                 '<div class="ti1">}</div>';
 
@@ -409,6 +408,6 @@ function HLF_structDelete(functionName, contractName, keyType, delFunc, struct){
                  '<div class="ti1">}</div>';
 
     delCode += '<div class="ti1">return shim.Success(nil)</div>' +
-                '<div>}</div>';
+                '<div>}</div><br>';
     return delCode;
 }
