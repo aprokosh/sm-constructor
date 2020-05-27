@@ -28,7 +28,7 @@
         <div class="col-5 left_col">
             <h4>Выберите необходимые типы данных</h4>
             <div class="accordeon_block">
-                <h3 class="clickable">Добавить</h3>
+                <h3 class="clickable">Добавить mapping</h3>
                 <block>
                     <div><form id="setTypeForm">
                         <div>Тип ключа:
@@ -50,10 +50,46 @@
                     </form></div>
                 </block>
             </div>
+            <div class="accordeon_block">
+                <h3 class="clickable">Определить структуру</h3>
+                <block>
+                    <div><form id="setStructure">
+                        <div><input type="text" id="structName" placeholder="Имя структуры" name = "structName" pattern="[A-Za-z0-9]{1,15}" required></div><br>
+                        <div id="addMoreItems" class="1">
+                            <div>
+                                <span>
+                                    <select class="structTypePlace" id="varType_1">
+                                        <option>int</option>
+                                        <option>uint</option>
+                                        <option>string</option>
+                                        <option>address</option>
+                                    </select>
+                                </span>
+                            <span>
+                                <input type="text" id="varName_1" class="structNamePlace" placeholder="Имя переменной" name = "varName" pattern="[A-Za-z0-9]{1,15}" required>
+                            </span>
+                            </div><br>
+                        </div>
+                        <button class="submitType" onclick="addItem(this)">Ещё</button>
+                        <div><br>Тип ключа для структуры:
+                            <select id="structKeyType">
+                                <option>int</option>
+                                <option>uint</option>
+                                <option>string</option>
+                                <option>address</option>
+                            </select>
+                        </div><br>
+                        <input class="btn btn-outline-dark submitType" type="submit" value="Добавить">
+                    </form></div>
+                </block>
+            </div>
+
         </div>
             <div class="col-5 right_col">
                 <h4>Ваш смарт-контракт</h4>
-                <div id="yourContract"></div>
+                <div id="yourContract">
+                    <div id="structsPlace"></div>
+                </div>
                 <br>
                 <div id="error_message"></div>
                 <div id="placeForQuestionBlock"></div>
@@ -75,6 +111,21 @@
         </div>
     </div>
 </div>
+    <script>
+        function addItem(that){
+            newItem = "";
+            let n = $(document).find('#addMoreItems').attr('class');
+            let n_int = parseInt(n, 10);
+            ++n_int;
+            n = n_int.toString()
+            document.getElementById('addMoreItems').className = n;
+
+            newItem += '<div><span><select class="structKeyPlace" id="varType_' + n + '">';
+            newItem += '<option>int</option><option>uint</option><option>string</option><option>address</option></select></span>';
+            newItem += '<span><input type="text" id="varName_' + n + '" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z0-9]{1,15}" required></span></div><br>';
+            document.getElementById('addMoreItems').innerHTML += newItem;
+        }
+    </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
     <script src="js/main.js"></script>
     <script src="js/createBlock.js"></script>

@@ -247,3 +247,11 @@ block{
     color: white;
     padding: 30px;
 }
+
+.structTypePlace{
+    display: inline-block;
+}
+
+.structNamePlace{
+    display: inline-block;
+}
