@@ -8,7 +8,6 @@ app.use(bodyParser.json())
 app.use(express.static(__dirname))
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 var Crypto = require('crypto-js')
-ObjectId = require("mongodb").ObjectID;
 
 var port = process.env.PORT||3000;
 app.listen(process.env.PORT ||port, () => {
@@ -148,78 +147,37 @@ app.get('/getrole', (req, res) => {
 
 
 async function postText (req, res) {
-  mongoClient.connect(url, async function (err, client) {
-    client.db("smart-contracts").collection("contractTextes").findOne({
-      "creator": req.session.username, "name": req.body.name
-    }, function (err, result) {
-      if (result) {
-        client.db("smart-contracts").collection("contractTextes").findOneAndUpdate({
-          "creator": req.session.username, "name": req.body.name}, { $set: {"platform": req.body.platform, "text": req.body.text}});
-      } else client.db("smart-contracts").collection("contractTextes").insertOne({
-        "creator": req.session.username, "name": req.body.name, "platform": req.body.platform, "text": req.body.text
-      });
-    });
-  });
-  res.send("ok")
-}
-app.post("/savetext", urlencodedParser, postText);
-
-async function postCode (req, res) {
   await mongoClient.connect(url, async function (err, client) {
-    await client.db("smart-contracts").collection("contractCodes").findOne({
-      "creator": req.session.username, "name": req.body.name
-    }, function (err, result) {
-      if (result) {
-        client.db("smart-contracts").collection("contractCodes").findOneAndUpdate({
-          "creator": req.session.username, "name": req.body.name
-        }, {$set: {"code": req.body.code}});
-      } else client.db("smart-contracts").collection("contractCodes").insertOne({
-        "creator": req.session.username, "name": req.body.name, "code": req.body.code
-      });
+    await client.db("smart-contracts").collection("contactTextes").findOneAndUpdate({ "creator" : req.session.username, "name": req.body.name},
+    { $inc: { "text" : req.body.text } }
+  )
+  async function addTask() {
+    await mongoClient.connect(url, async function (err, client) {
+      await client.db("tododo").collection("tasks").insertOne({
+        name: req.body.name,
+        description: req.body.description,
+        deadline: req.body.deadline,
+        author: req.session.username,
+        status: "active"
+      })
     });
-  });
-  res.send("Saved")
-}
-app.post("/saveproject", urlencodedParser, postCode);
+    await add_to_list()
+  }
+  async function add_to_list(callback) {
+    new_id = await get_task_id(req.body.name, req.session.username);
+    console.log("this function is add_to_list and it returned ", new_id)
+    await find_(new_id)
+  }
 
-function getTextes(req, res) {
-  mongoClient.connect(url, function (err, client) {
-    client.db("smart-contracts").collection("contractTextes").find({creator: req.session.username}).toArray(function(err, results){
-      let contracts = []
-      for (let res of results) {
-        contracts.push({ id: res._id, name: res.name, platform: res.platform, text: res.text})
-      }
-      res.status(200).send({ data: contracts })
+  async function find_(some_id) {
+    await mongoClient.connect(url, async function (err, client) {
+      await client.db("tododo").collection("users").findOneAndUpdate(
+          {"login": req.session.username}, {$addToSet: {tasks: some_id}})
+      console.log("added ", some_id)
     });
-  });
-}
-app.get("/gettextes", urlencodedParser, getTextes);
+  }
 
-async function deleteText (req, res) {
-  let id = req.body.id;
-  mongoClient.connect(url, function (err, client) {
-    client.db("smart-contracts").collection("contractTextes").deleteOne({"_id": ObjectId(id)})
-  });
-}
-app.post("/deleteText", urlencodedParser, deleteText);
-
-function getCodes(req, res) {
-  mongoClient.connect(url, function (err, client) {
-    client.db("smart-contracts").collection("contractCodes").find({creator: req.session.username}).toArray(function(err, results){
-      let contracts = []
-      for (let res of results) {
-        contracts.push({ id: res._id, name: res.name, code: res.code})
-      }
-      res.status(200).send({ data: contracts })
-    });
-  });
-}
-app.get("/getcodes", urlencodedParser, getCodes);
-
-async function deleteCode (req, res) {
-  let id = req.body.id;
-  mongoClient.connect(url, function (err, client) {
-    client.db("smart-contracts").collection("contractCodes").deleteOne({"_id": ObjectId(id)})
-  });
-}
-app.post("/deleteCode", urlencodedParser, deleteCode);
+  await addTask()
+  res.send()
+};
+app.post("/savetext", urlencodedParser, postText);

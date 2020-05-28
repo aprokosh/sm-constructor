@@ -1,8 +1,8 @@
 function  goToCreate(button) {
     let id = 'saved_inv' + button.value;
     let code = document.getElementById(id).innerHTML;
-    document.getElementById('yourContract').innerHTML = code;
-    window.location.href = `/create`;
+    localStorage.setItem('savedProject', code)
+    window.location = '/create';
 }
 
 function saved_DeleteThis(button) {

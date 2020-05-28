@@ -201,8 +201,6 @@ block{
 
 #err_msg{
     position: absolute;
-    left: 45%;
-    top: 70%;
     width: 20vw;
 }
 
@@ -229,8 +227,8 @@ block{
 
 #questionBlock.push{
     position: absolute;
-    top: 35%;
-    right: 20%;
+    left: -25%;
+    top: -4px;
     width: 700px;
 }
 
@@ -248,7 +246,7 @@ block{
 .codeBlock{
     background-color: black;
     color: white;
-    padding: 5px 25px;
+    padding: 30px;
 }
 
 .structTypePlace{
@@ -257,30 +255,4 @@ block{
 
 .structNamePlace{
     display: inline-block;
-}
-
-h3{
-    text-align: center;
-}
-
-.leftBlock{
-    display: inline-block;
-    float: left;
-    margin: 5px;
-}
-
-.rightBlock{
-    display: inline-block;
-    float: right;
-    margin: 5px;
-}
-
-.contract{
-    background-color: #eddbf6;
-    margin-top:30px;
-    padding: 20px;
-}
-
-.invisibleBlock{
-    display: none;
 }

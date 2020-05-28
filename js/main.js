@@ -58,4 +58,15 @@ function showErr(data){
     document.getElementById('error_message').innerHTML = qq;
 }
 
+function isCalled(){
+    let code = localStorage.getItem('savedProject')
+    if (code)
+        document.getElementById('yourContract').innerHTML = code;
+
+    localStorage.removeItem('savedProject')
+    localStorage.clear()
+}
+
+isCalled();
 getErr();
+

@@ -6,19 +6,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style/main.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://cdn.tiny.cloud/1/oieds5a5s1783ehm35gze3s9r7j16guvsw8z6uyjxnvokcrg/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#redactorPlace',
-            plugin: 'codesample',
-            toolbar: 'codesample',
-            skin: 'oxide-dark',
-            theme: 'silver',
-            inline: true,
-            a_plugin_option: true,
-            a_configuration_option: 400
-        });
-    </script>
 </head>
 <body>
 <div class="container-fluid body">
@@ -39,15 +26,11 @@
         <div class="col-2"></div>
         <div class="col-8">
             <h2>Готовые смарт-контракты</h2>
-            <div id="redactorPlace" class="codeBlock">
-            </div>
-            <div id="putContractsHere"></div>
         </div>
         <div class="col-2"></div>
     </div>
 </div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 <script src="js/main.js"></script>
-<script src="js/myContracts.js"></script>
 </body>
 </html>
