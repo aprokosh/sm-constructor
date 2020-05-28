@@ -10,11 +10,18 @@ $('.accordeon_block h3').click(function () {
 
 
 //закрыть окошко
-
 $(document).on('click', '.cross_image', function(){
     $(this).parent().parent().toggleClass('deleteIt')
    $("div.deleteIt").remove()
 
+});
+
+//
+$(document).on('click', '.structItemRemovingCross', function(){
+    let n = document.getElementById('addMoreItems').className;
+    n = parseInt(n,10);
+    n = Number(n) - Number(1);
+    document.getElementById('addMoreItems').className = n.toString();
 });
 
 //получить сообщение об ошбке

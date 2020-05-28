@@ -6,6 +6,19 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style/main.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://cdn.tiny.cloud/1/oieds5a5s1783ehm35gze3s9r7j16guvsw8z6uyjxnvokcrg/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+           selector: '#mytextarea',
+            plugin: 'codesample',
+            toolbar: 'codesample',
+            skin: 'oxide-dark',
+            theme: 'silver',
+            a_plugin_option: true,
+            inline: true,
+            a_configuration_option: 400
+        });
+    </script>
 </head>
 <body>
 <div class="container-fluid body">
@@ -57,7 +70,7 @@
                     <div><form id="setStructure">
                         <div>Используйте цифры и латинские буквы.<br> <input type="text" id="structName" placeholder="Имя структуры" name = "structName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required></div><br>
                         <div id="addMoreItems" class="1">
-                            <div>
+                            <div class="structItem">
                                 <span>
                                     <select class="structTypePlace" id="varType_1">
                                         <option>int</option>
@@ -70,6 +83,7 @@
                                 </span>
                             <span>
                                 <input type="text" id="varName_1" class="structNamePlace" placeholder="Имя переменной" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required>
+                                <img class="cross_image clickable structItemRemovingCross" src="style/img/cross.svg" alt="close">
                             </span>
                             </div><br>
                         </div>
@@ -109,7 +123,14 @@
         <div class="row">
             <div class="col-1"></div>
 
-            <div class="col-10" id="inputRedactorHere"></div>
+            <div class="col-10">
+                <div id="inputRedactorHere"></div>
+                <form method="post">
+                    <div id="mytextarea">
+                    </div>
+                    <div id="placeForSaveButton"></div>
+                </form>
+            </div>
             <div class="col-1"></div>
         </div>
     </div>
@@ -125,7 +146,8 @@
 
             newItem += '<div><span><select class="structKeyPlace" id="varType_' + n + '">';
             newItem += '<option>int</option><option>uint</option><option>string</option><option>float (Go)</option><option>address (Solidity)</option><option>bool</option></select></span>';
-            newItem += '<span><input type="text" id="varName_' + n + '" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required></span></div><br>';
+            newItem += '<span><input type="text" id="varName_' + n + '" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required>' +
+                        '<img class="cross_image clickable structItemRemovingCross" src="style/img/cross.svg" alt="close"></span></div><br>';
             document.getElementById('addMoreItems').innerHTML += newItem;
         }
     </script>
@@ -135,6 +157,6 @@
     <script src="js/questions.js"></script>
     <script src="js/generatorEth.js"></script>
     <script src="js/generatorHLF.js"></script>
-    <script src="js/redactor.js"></script>
+    <script src="js/saving.js"></script>
 </body>
 </html>

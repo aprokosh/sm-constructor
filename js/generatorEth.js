@@ -7,15 +7,19 @@ function generateEth (contractName, blockList, varNames, structList, version){
         }
     }
 
-    let code = '<div id="codeBlock">';
-    code += '<h2>Код контракта</h2>';
+    let code = '<div id="codeBlock" class="codeBlock"><br>';
+    code += '<h4>Поле для редактирования кода</h4>';
+    code += '<div id="wholeContract">';
     code += generateEthBase(contractName, version);
     code += generateEthStructs(varNames, structList);
     code += generateEthFunctions(blockList, varNames, structList);
-    code += '<div>}</div>';
+    code += '<div>}</div></div>';
     code += '</div>';
 
-    document.getElementById('inputRedactorHere').innerHTML = code;
+    document.getElementById('mytextarea').innerHTML = code;
+
+    let buttonCode = '<div class="codeBlock"><button id="saveToDB" onclick="saveCodeToDB(this)" class="btn btn-outline-light">Сохранить</button></div>';
+    document.getElementById('placeForSaveButton').innerHTML = buttonCode;
 }
 
 function generateEthBase(contractName, version){

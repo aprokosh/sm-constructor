@@ -14,16 +14,19 @@ function generateHLF (contractName, blockList, structList){
         if (structList[i].dataset.typeofkey === "address")
             structList[i].dataset.typeofkey = "string";
 
-    let code = '<div id="codeBlock">';
-    code += '<h2>Код контракта</h2>';
-
+    let code = '<div id="codeBlock" class="codeBlock"><br>';
+    code += '<h4>Поле для редактирования кода</h4>';
+    code += '<div id="wholeContract">';
     code += generateHLFBase(contractName);
     code += generateHLFStructs(structList);
     code += generateHLFBase2(contractName);
     code += generateHLFFunctions(contractName, blockList, structList);
-    code += '</div>';
+    code += '</div></div>';
 
-    document.getElementById('inputRedactorHere').innerHTML = code;
+    document.getElementById('mytextarea').innerHTML = code;
+
+    let buttonCode = '<div class="codeBlock"><button id="saveToDB" onclick="saveCodeToDB(this)" class="btn btn-outline-light">Сохранить</button></div>';
+    document.getElementById('placeForSaveButton').innerHTML = buttonCode;
 }
 
 function generateHLFBase(contractName) {

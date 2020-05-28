@@ -183,6 +183,7 @@ $('#setStructure').submit( function(event){
     document.getElementById('addMoreItems').className = '1';
     let newItem = '<div><span><select class="structKeyPlace" id="varType_1">';
     newItem += '<option>int</option><option>uint</option><option>string</option><option>float (Go)</option><option>address (Solidity)</option><option>bool</option></select></span>';
-    newItem += '<span><input type="text" id="varName_1" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required></span></div><br>';
+    newItem += '<span><input type="text" id="varName_1" placeholder="Имя переменной" class="structVarPlace" name = "varName" pattern="[A-Za-z]+[A-Za-z0-9]{0,15}" required>' +
+                '<img class="cross_image clickable structItemRemovingCross" src="style/img/cross.svg" alt="close"></span></div><br>';
     document.getElementById('addMoreItems').innerHTML = newItem;
 });
