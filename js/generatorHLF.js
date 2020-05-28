@@ -14,9 +14,11 @@ function generateHLF (contractName, blockList, structList){
         if (structList[i].dataset.typeofkey === "address")
             structList[i].dataset.typeofkey = "string";
 
-    let code = '<div id="codeBlock" class="codeBlock"><br>';
-    code += '<h4>Поле для редактирования кода</h4>';
-    code += '<div id="wholeContract">';
+    let headerCode = '<div class="codeBlock"><br>';
+    headerCode += '<h4>Поле для редактирования кода</h4></div>';
+    document.getElementById('placeForHeader').innerHTML = headerCode;
+
+    let code = '<div id="wholeContract" class="codeBlock">';
     code += generateHLFBase(contractName);
     code += generateHLFStructs(structList);
     code += generateHLFBase2(contractName);

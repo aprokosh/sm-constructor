@@ -50,6 +50,8 @@ function getQuestionsEth(that) {
         $(this).parent().parent().toggleClass('deleteIt')
         $("div.deleteIt").remove()
 
+        $(document).find('#yourContract').data('name', contractName).attr('data-name', contractName);
+        $(document).find('#yourContract').data('platform', "Ethereum").attr('data-platform', "Ethereum");
         generateEth(contractName, blockList, varNames, structList, version);
     });
 }
@@ -82,6 +84,8 @@ function getQuestionsHLF(that) {
         $(this).parent().parent().toggleClass('deleteIt')
         $("div.deleteIt").remove();
 
+        $(document).find('#yourContract').data('name', contractName).attr('data-name', contractName);
+        $(document).find('#yourContract').data('platform', "HLF").attr('data-platform', "HLF");
         generateHLF(contractName, blockList, structList);
     });
 }

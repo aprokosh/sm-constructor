@@ -108,13 +108,11 @@
                     <div id="structsPlace"></div>
                 </div>
                 <br>
-                <div id="error_message"></div>
-                <div id="placeForQuestionBlock"></div>
 
                 <div class="languageButtons">
                 <button id="generateEth" type='submit' onclick="getQuestionsEth(this)" class='btn btn-outline-dark'>Ethereum</button>
                 <button id="generateHLF" type='submit' onclick="getQuestionsHLF(this)" class='btn btn-outline-dark'>Hyperledger Fabric</button>
-                <button id="saveAsProject" type='submit' onclick="saveProject(this)" class='btn btn-outline-dark'>Сохранить как проект</button>
+                <button id="saveAsProject" onclick="saveProject(this)" class='btn btn-outline-dark'>Сохранить как проект</button>
                 </div>
             </div>
             <div class="col-1"></div>
@@ -125,12 +123,13 @@
 
             <div class="col-10">
                 <div id="inputRedactorHere"></div>
-                <form method="post">
+                <div id="placeForHeader"></div>
                     <div id="mytextarea">
                     </div>
                     <div id="placeForSaveButton"></div>
-                </form>
             </div>
+            <div id="placeForQuestionBlock"></div>
+            <div id="error_message"></div>
             <div class="col-1"></div>
         </div>
     </div>

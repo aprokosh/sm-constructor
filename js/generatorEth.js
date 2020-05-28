@@ -7,13 +7,15 @@ function generateEth (contractName, blockList, varNames, structList, version){
         }
     }
 
-    let code = '<div id="codeBlock" class="codeBlock"><br>';
-    code += '<h4>Поле для редактирования кода</h4>';
-    code += '<div id="wholeContract">';
+    let headerCode = '<div class="codeBlock"><br>';
+    headerCode += '<h4>Поле для редактирования кода</h4></div>';
+    document.getElementById('placeForHeader').innerHTML = headerCode;
+
+    let code = '<div id="wholeContract" class="codeBlock">';
     code += generateEthBase(contractName, version);
     code += generateEthStructs(varNames, structList);
     code += generateEthFunctions(blockList, varNames, structList);
-    code += '<div>}</div></div>';
+    code += '<div>}</div>';
     code += '</div>';
 
     document.getElementById('mytextarea').innerHTML = code;
