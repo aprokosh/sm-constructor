@@ -43,7 +43,7 @@ function generateHLFBase(contractName) {
         '<div class="ti1">"github.com/s7techlab/cckit/extensions/owner"</div>' +
         '<div class="ti1">"fmt"</div>' +
         '<div class="ti1">"github.com/hyperledger/fabric/core/chaincode/shim"</div>' +
-        '<div class="ti1">github.com/hyperledger/fabric/protos/peer"</div>' +
+        '<div class="ti1">"github.com/hyperledger/fabric/protos/peer"</div>' +
         '<div>)</div><br>';
 
     baseCode += '<div> type ' + contractName + ' struct{</div>';
