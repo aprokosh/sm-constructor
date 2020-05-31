@@ -60,7 +60,7 @@ app.post("/sign-up", urlencodedParser, function (req, res) {
         error_message="Слабый пароль";
       }
       else {
-        client.db("smart-contracts").collection("users").insertOne({login: req.body.name, password: Crypto.SHA256(req.body.password1).toString(), role: 'user', fav: []});
+        client.db("smart-contracts").collection("users").insertOne({login: req.body.name, password: Crypto.SHA256(req.body.password1).toString()});
         res.sendFile(__dirname + '/login.html');
       }
     });
