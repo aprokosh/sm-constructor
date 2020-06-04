@@ -20,7 +20,6 @@ function generateHLF (contractName, blockList, structList){
 
     let code = '<div id="wholeContract" class="codeBlock">';
     code += generateHLFBase(contractName);
-    code += generateHLFAPI();
     code += generateHLFStructs(structList);
     code += generateHLFBase2(contractName);
     code += generateHLFFunctions(contractName, blockList, structList);
@@ -39,39 +38,18 @@ function generateHLFBase(contractName) {
     baseCode += '<div>import (</div>';
     baseCode += '<div class="ti1">"encoding/json"</div>' +
         '<div class="ti1">"strconv"</div>' +
-        '<div class="ti1">"github.com/hyperledger/fabric/core/chaincode/shim/ext/cid"</div>' +
+        '<div class="ti1">"github.com/hyperledger/fabric-chaincode-go/pkg/cid"</div>' +
         '<div class="ti1">"fmt"</div>' +
-        '<div class="ti1">"net/http"</div>' +
-        '<div class="ti1">"github.com/hyperledger/fabric/core/chaincode/shim"</div>' +
-        '<div class="ti1">"github.com/hyperledger/fabric/protos/peer"</div>' +
+        '<div class="ti1">"github.com/hyperledger/fabric-chaincode-go/shim"</div>' +
+        '<div class="ti1">"github.com/hyperledger/fabric-protos-go/peer"</div>' +
         '<div>)</div><br>';
 
     baseCode += '<div> type ' + contractName + ' struct{</div>';
-    baseCode += '<div>}</div><br>'
-
-    return baseCode;
-}
-
-function generateHLFAPI(){
-    let apiCode = "";
-    apiCode += '<div>func Success(rc int32, doc string, payload []byte) peer.Response {</div>' +
-        '<div class="ti1">return peer.Response{</div>' +
-            '<div class-="ti2">Status:  rc,</div>' +
-                '<div class="ti3">Message: doc,</div>' +
-                '<div class="ti3">Payload: payload,</div>' +
-        '<div class="ti1">}</div>' +
-    '<div>}</div><br>' +
-        '<div>func Error(rc int32, doc string) peer.Response {</div>' +
-        '<div class="ti1">return peer.Response{</div>' +
-            '<div class="ti2">Status:  rc,</div>' +
-                '<div class="ti2">Message: doc,</div>' +
-        '<div class="ti1">}</div>' +
-    '<div>}</div><br>' +
+    baseCode += '<div>}</div><br>' +
         '<div>func BytesToString(data []byte) string {</div>' +
         '<div class="ti1">return string(data[:])</div>' +
         '<div>}</div><br>';
-
-    return apiCode;
+    return baseCode;
 }
 
 function generateHLFBase2(contractName){
@@ -116,7 +94,6 @@ function generateHLFFunctions(contractName, blockList, structList){
     let addedFuncs = [];
 
     for (let i = 0 ; i<n; ++i){
-        let thisKeyType = blockList[i].dataset.typeofkey;
         let thisVarType = blockList[i].dataset.typeofvar;
         let thisGetFunc = blockList[i].dataset.get;
         let thisSetFunc = blockList[i].dataset.set;
@@ -171,16 +148,23 @@ function generateHLFInvoke(contractName, addedFuncs){
 
     invoke += '<div>func (ptr *' + contractName + ') Invoke(stub shim.ChaincodeStubInterface) peer.Response {</div>';
     invoke += '<div class="ti1">function, args := stub.GetFunctionAndParameters()</div>';
-    invoke += '<div class="ti1">switch function {</div>';
+    invoke += '<div class="ti1">var result string</div>' +
+                '<div class="ti1">var err error</div>';
 
-    for (let i=0; i<n; ++i){
-        invoke += '<div class="ti1">case "' + addedFuncs[i] + '": </div>';
-        invoke += '<div class="ti2">return ptr.' + addedFuncs[i] + '(stub, args)</div>';
+    invoke += '<div class="ti1">if function == "' + addedFuncs[0] + '"{ </div>' +
+                '<div class="ti2">result, err = ' + addedFuncs[0] + '(stub, args)</div>' +
+                '<div class="ti1">}</div>';
+
+    for (let i=1; i<n; ++i) {
+        invoke += '<div class="ti1"> else if function == "' + addedFuncs[i] + '"{ </div>' +
+                '<div class="ti2">result, err = ' + addedFuncs[i] + '(stub, args)</div>' +
+                '<div class="ti1">}</div>';
     }
 
-    invoke += '<div class="ti1">default:</div>';
-    invoke += '<div class="ti2">return shim.Error("Invalid function name")</div>';
-    invoke += '<div class="ti1">}</div><br>';
+    invoke += '<div class="ti1">if err != nil {</div>' +
+                '<div class="ti2">return  shim.Error(err.Error())</div>' +
+                '<div class="ti1">}</div><br>';
+    invoke += '<div class="ti1">return shim.Success([]byte(result))</div><br>'
     invoke += '<div>}</div><br>'
 
     return invoke;
@@ -206,7 +190,7 @@ function ownerCheck(){
     let ownerCode = '<div class="ti1">owner_id, err := stub.GetCreator()</div>' +
     '<div class="ti1">this_id, err := cid.GetID(stub)</div>' +
     '<div class="ti1">if this_id != BytesToString(owner_id) {</div>' +
-        '<div class="ti2">return Error(403, "Access to this method is only for creator")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Access to this method is only for creator")</div>' +
     '<div class="ti1">}</div>';
     return ownerCode;
 }
@@ -217,24 +201,24 @@ function ownerCheck(){
 function HLF_get(functionName, contractName, getFunc){
     let getCode = "";
 
-    getCode += '<div>func (ptr *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) peer.Response {';
+    getCode += '<div> func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
     if (getFunc === "close") getCode += ownerCheck();
     else getCode += '<div class="ti1"> var err error</div>';
+    getCode += '<div class="ti1">var valAsbytes []byte</div>';
 
     getCode += '<div class="ti1">if len(args) != 1 {</div>' +
-                '<div class="ti2">return Error(400, "Incorrect number of arguments. Expecting 1")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Incorrect number of arguments. Expecting a key")</div>' +
                 '<div class="ti1">}</div>';
 
-    getCode += '<div class="ti1"> var key = args[0]</div>' +
-                '<div class="ti1">var valAsbytes []byte</div>';
-    getCode += '<div class="ti1">valAsbytes, err = stub.GetState(key)</div>';
+
+    getCode += '<div class="ti1">valAsbytes, err = stub.GetState(args[0])</div>';
     getCode += '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">return Error(404, "Not Found")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Failed to get: %s with error:  %s", args[0], err)</div>' +
         '<div class="ti1">} else if valAsbytes == nil {</div>' +
-        '<div class="ti2">return Error(404, "Not Found")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Not Found: %s", args[0])</div>' +
         '<div class="ti1">}</div>';
 
-    getCode += '<div class="ti1">return peer.Response{Status: 200, Message: "OK", Payload: valAsbytes}</div>';
+    getCode += '<div class="ti1">return string(valAsbytes), nil</div>';
     getCode += '<div>}</div><br>';
 
     return getCode;
@@ -245,22 +229,19 @@ function HLF_get(functionName, contractName, getFunc){
 function HLF_set(functionName, contractName, setFunc){
     let setCode = "";
 
-    setCode += '<div>func (ptr *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) peer.Response {';
+    setCode += '<div> func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
     if (setFunc === "close") setCode += ownerCheck();
     else setCode += '<div class="ti1"> var err error</div>';
 
     setCode += '<div class="ti1">if len(args) != 2{</div>' +
-            '<div class="ti2">return Error(401, "Incorrect number of arguments. Expecting 2")</div>' +
+            '<div class="ti2">return "", fmt.Errorf("Incorrect number of arguments. Expecting a key and a value")</div>' +
             '<div class="ti1">}</div>';
 
-    setCode += '<div class="ti1">var key = args[0]</div>';
-    setCode += '<div class="ti1">var data = args[1]</div>';
-
-    setCode += '<div class="ti1">err = stub.PutState(key, []byte(data))</div>' +
+    setCode += '<div class="ti1">err = stub.PutState(args[0], []byte(args[1]))</div>' +
         '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">return Error(500, "Error")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Failed to set: %s", args[0])</div>' +
         '<div class="ti1">}</div>';
-    setCode += '<div class="ti1">return Success(201, "Created", nil)</div>';
+    setCode += '<div class="ti1">return args[1], nil</div>';
     setCode += '<div>}</div><br>';
 
     return setCode;
@@ -272,30 +253,28 @@ function HLF_set(functionName, contractName, setFunc){
 function HLF_delete(functionName, contractName, delFunc){
     let delCode = "";
 
-    delCode += '<div>func (ptr *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) peer.Response {';
+    delCode += '<div>func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
     if (delFunc === "close") delCode += ownerCheck();
     else delCode += '<div class="ti1"> var err error</div>';
-
+    delCode += '<div class="ti1">var valAsbytes []byte</div>';
     delCode += '<div class="ti1">if len(args) != 1 {</div>' +
-        '<div class="ti2">return Error(400, "Incorrect number of arguments. Expecting 1")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Incorrect number of arguments. Expecting a key")</div>' +
         '<div class="ti1">}</div>';
 
-    delCode += '<div class="ti1">var key = args[0]</div>';
-
-    delCode += '<div class="ti1">valAsbytes, err := stub.GetState(key)</div>'
+    delCode += '<div class="ti1">valAsbytes, err = stub.GetState(args[0])</div>'
 
     delCode += '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">return Error(404, "Not Found")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Not Found")</div>' +
         '<div class="ti1">} else if valAsbytes == nil {</div>' +
-        '<div class="ti2">return Error(404, "Not Found")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Not Found")</div>' +
         '<div class="ti1">}</div>';
 
-    delCode += '<div class="ti1">err = stub.DelState(key)</div>' +
+    delCode += '<div class="ti1">err = stub.DelState(args[0])</div>' +
         '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">return Error(500, "Error")</div>' +
+        '<div class="ti2">return fmt.Errorf("Failed to delete: %s", args[0])</div>' +
         '<div class="ti1">}</div>';
 
-    delCode += '<div class="ti1">return Success(202, "Deleted", nil)</div>' +
+    delCode += '<div class="ti1">return "Deleted", nil</div>' +
         '<div>}</div><br>';
     return delCode;
 }
@@ -307,26 +286,23 @@ function HLF_structGet(functionName, contractName, getFunc, struct){
     let getCode = "";
     let structName = struct.dataset.structname;
 
-    getCode += '<div>func (ptr *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) peer.Response {';
+    getCode += '<div>func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
     if (getFunc === "close") getCode += ownerCheck();
     else getCode += '<div class="ti1"> var err error</div>';
     getCode += '<div class="ti1">var valAsbytes []byte</div>';
 
     getCode += '<div class="ti1">if len(args) != 1 {</div>' +
-                '<div class="ti2">return Error(400, "Incorrect number of arguments. Expecting 1")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Incorrect number of arguments. Expecting a key")</div>' +
                 '<div class="ti1">}</div>';
 
-    getCode += '<div class="ti1"> var key = args[0]</div>';
-    getCode += '<div class="ti1">valAsbytes, err = stub.GetState(key)</div>';
+    getCode += '<div class="ti1">valAsbytes, err = stub.GetState(args[0])</div>';
     getCode += '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">return Error(404, "Not Found")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Failed to get: %s with error:  %s", args[0], err)</div>' +
                 '<div class="ti1">} else if valAsbytes == nil {</div>' +
-                '<div class="ti2">return Error(404, "Not Found")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Not Found: %s", args[0])</div>' +
                 '<div class="ti1">}</div>';
-    getCode += '<div class="ti1">' + structName + '_JSON := ' + structName + '{}</div>';
-    getCode += '<div class="ti1">valAsbytes, err = json.Marshal(' + structName + '_JSON)</div>';
 
-    getCode += '<div class="ti1">return Success(200, "OK", valAsbytes)</div>';
+    getCode += '<div class="ti1">return string(valAsbytes), nil</div>';
     getCode += '<div class="ti1">}</div><br>';
 
     return getCode;
@@ -344,22 +320,25 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
     for (let j = 0; j<n; ++j) if (types[j]==="address") types[j]="string";
     let names = struct.dataset.structnames.split(',');
 
-    setCode += '<div>func (ptr *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) peer.Response {';
+    setCode += '<div>func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
     if (setFunc === "close") setCode += ownerCheck();
     else setCode += '<div class="ti1"> var err error</div>';
     for (let i=0; i<n; ++i) {
         setCode += '<div class="ti1">var ' + names[i] + ' ' + types[i] + '</div>';
     }
-    setCode += '<div class="ti1">if len(args) != ' + n_1 + '{</div>' +
-        '<div class="ti2">return Error(401, "Incorrect number of arguments. Expecting ' + n + '")</div>' +
-        '<div class="ti1">}</div>';
+    setCode += '<div class="ti1"> var ' + structName + 'JSONasBytes []byte</div>';
 
-    setCode += '<div class="ti1">var key = args[0]</div>';
+    setCode += '<div class="ti1">if len(args) != ' + n_1 + '{</div>' +
+        '<div class="ti2">return Error(401, "Incorrect number of arguments. Expecting ' + n_1 + ': a key and struct arguments")</div>' +
+        '<div class="ti1">}</div>';
 
     for (let i=1; i<=n; ++i) {
         let argName = 'args[' + i + ']';
-        let conv = convertingFunc("string", types[i-1], argName);
-        setCode += '<div class="ti1">' + names[i-1] + ', err = ' + conv + '</div>';
+        if (types[i-1] !== "string") {
+            let conv = convertingFunc("string", types[i - 1], argName);
+            setCode += '<div class="ti1">' + names[i - 1] + ', err = ' + conv + '</div>';
+        }
+        else setCode += '<div class="ti1">' + names[i - 1] + ' = ' + argName + '</div>';
     }
 
     setCode += '<div class="ti1">' + structName +' := &' + structName + '{' + names[0];
@@ -368,14 +347,14 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
 
     setCode += '<div class="ti1">' + structName + 'JSONasBytes, err := json.Marshal(' + structName + ')</div>';
     setCode += '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">return Error(402, "Trouble while making JSON")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Trouble while making JSON")</div>' +
                 '<div class="ti1">}</div>';
 
-    setCode += '<div class="ti1">err = stub.PutState(key, ' + structName + 'JSONasBytes)</div>' +
+    setCode += '<div class="ti1">err = stub.PutState(args[0], ' + structName + 'JSONasBytes)</div>' +
                 '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">return Error(500, "Error")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Error")</div>' +
                  '<div class="ti1">}</div>';
-    setCode += '<div class="ti1">return Success(201, "Created", nil)</div>';
+    setCode += '<div class="ti1">return "Created", nil</div>';
     setCode += '<div>}</div><br>';
 
     return setCode;
@@ -388,37 +367,35 @@ function HLF_structDelete(functionName, contractName, delFunc, struct){
     let delCode = "";
     let structName = struct.dataset.structname;
 
-    delCode += '<div>func (ptr *' + contractName + ') ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) peer.Response {';
+    delCode += '<div>func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
     if (delFunc === "close") delCode += ownerCheck();
     else delCode += '<div class="ti1"> var err error</div>';
     delCode += '<div class="ti1">var valAsbytes []byte</div>';
     delCode += '<div class="ti1">var ' + structName + '_JSON ' + structName + '</div>';
 
     delCode += '<div class="ti1">if len(args) != 1 {</div>' +
-                '<div class="ti2">return Error(400, "Incorrect number of arguments. Expecting 1")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Incorrect number of arguments. Expecting a key")</div>' +
                 '<div class="ti1">}</div>';
 
-    delCode += '<div class="ti1">var key = args[0]</div>';
-
-    delCode += '<div class="ti1">valAsbytes, err = stub.GetState(key)</div>'
+    delCode += '<div class="ti1">valAsbytes, err = stub.GetState(args[0])</div>'
 
     delCode += '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">return Error(404, "Not Found")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Not Found")</div>' +
                 '<div class="ti1">} else if valAsbytes == nil {</div>' +
-                '<div class="ti2">return Error(404, "Not Found")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Not Found")</div>' +
                 '<div class="ti1">}</div>';
 
     delCode += '<div class="ti1">err = json.Unmarshal([]byte(valAsbytes), &' + structName + '_JSON)</div>' +
                 '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">return Error(403, "JSON Is Not Valid")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("JSON Is Not Valid")</div>' +
                 '<div class="ti1">}</div>';
 
     delCode += '<div class="ti1">err = stub.DelState(key)</div>' +
                 '<div class="ti1">if err != nil {</div>' +
-                '<div class="ti2">return Error(500, "Error")</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Failed to delete: %s", args[0])</div>' +
                  '<div class="ti1">}</div>';
 
-    delCode += '<div class="ti1">return Success(202, "Deleted", nil)</div>' +
+    delCode += '<div class="ti1">return "Deleted", nil</div>' +
                 '<div>}</div><br>';
     return delCode;
 }
