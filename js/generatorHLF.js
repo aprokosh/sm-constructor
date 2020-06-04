@@ -76,7 +76,7 @@ function generateHLFStructs(structList) {
         let names = structList[i].dataset.structnames.split(',');
         for (let j = 0; j<k; ++j){
             if (types[j]==="address") types[j]="string";
-            code += '<div class="ti1">' + names[j] + ' ' + types[j] + '</div>';
+            code += '<div class="ti1">' + capitalizeFirst(names[j]) + ' ' + types[j] + '</div>';
         }
         code += '<div>}</div><br>';
     }
@@ -168,6 +168,11 @@ function generateHLFInvoke(contractName, addedFuncs){
     invoke += '<div>}</div><br>'
 
     return invoke;
+}
+
+function capitalizeFirst(string)
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function convertingFunc(fromType, toType, varName){

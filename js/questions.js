@@ -26,13 +26,14 @@ function getQuestionsEth(that) {
         newBlock += '<select id="solidityVersion"><option>0.5.0</option><option>0.5.1</option><option>0.5.10</option></select></div>';
     }
     newBlock += getVariablesList(this);
+    newBlock += '<div><input type="checkbox" id="checkKeyToVal" name="checkIt"> Один ключ => одно значение</div>';
     newBlock += '<br> <input class="btn btn-outline-dark submitType" type="submit" value="Сгенерировать"></form></div></div>'
 
     document.getElementById('placeForQuestionBlock').innerHTML = newBlock;
 
     $('#questionForm').submit(function (event) {
         event.preventDefault();
-
+        let isCheck = document.getElementById('checkKeyToVal');
         $(document).find('block').hide(200)
 
         let blockList = document.querySelectorAll('#yourContract div.dataTypeBlock');
@@ -52,7 +53,11 @@ function getQuestionsEth(that) {
 
         $(document).find('#yourContract').data('name', contractName).attr('data-name', contractName);
         $(document).find('#yourContract').data('platform', "Ethereum").attr('data-platform', "Ethereum");
-        generateEth(contractName, blockList, varNames, structList, version);
+
+
+
+        if (isCheck.checked === true) generateEth2(contractName, blockList, structList, version)
+        else generateEth(contractName, blockList, varNames, structList, version)
     });
 }
 

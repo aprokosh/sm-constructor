@@ -74,7 +74,7 @@ app.post("/login", urlencodedParser, function (req, res) {
         if (Crypto.SHA256(req.body.password).toString() === result.password) {
           req.session.authorized = true;
           req.session.username = req.body.login;
-          res.redirect('/my-contracts');
+          res.redirect('/create');
         }
         else {
           console.log('Неверный пароль');
@@ -104,7 +104,7 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/login.html')
+  res.sendFile(__dirname + '/create.html')
 });
 
 app.get('/create', (req, res) => {

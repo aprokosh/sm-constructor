@@ -12,6 +12,7 @@ function generateEth (contractName, blockList, varNames, structList, version){
     document.getElementById('placeForHeader').innerHTML = headerCode;
 
     let code = '<div id="wholeContract" class="codeBlock">';
+
     code += generateEthBase(contractName, version);
     code += generateEthStructs(varNames, structList);
     code += generateEthFunctions(blockList, varNames, structList);
