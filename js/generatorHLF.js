@@ -362,7 +362,7 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
         setCode += '<div class="ti1">' + names[i-1] + ', err = ' + conv + '</div>';
     }
 
-    setCode += '<div class="ti1">' + structName +' := &' + structName + '{' + names[0] + ';';
+    setCode += '<div class="ti1">' + structName +' := &' + structName + '{' + names[0];
     for (let i=1; i<n; ++i) setCode += ', ' + names[i];
     setCode += '}</div>';
 
