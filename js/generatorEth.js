@@ -38,7 +38,7 @@ function generateEthBase(contractName, version){
     return baseCode;
 }
 
-function generateEthStructs(varNames, structList) {
+function generateEthStructs(structList) {
     let code = "";
     let n = structList.length;
 
@@ -130,9 +130,11 @@ function EthStructFunc (name, keyType, varType, block, struct){
         code += ') public {</div>';
         if (block.dataset.set === "close")
             code += '<div class="ti2">require (msg.sender==owner, "Access to set this type is only for owner");</div>'
-        code += '<div class="ti2">' + structName + ' memory newItem = ' + name + '[key];</div>';
-        for (let i = 0; i<n; ++i)
-            code += '<div class="ti2"> newItem.' + names[i] + ' = arg' + i + ';</div>';
+        code += '<div class="ti2">' + structName + ' memory newItem = ' + structName + '(arg_' + names[0];
+        for (let i = 1; i<n; ++i)
+            code += ', arg_' + names[i];
+        code += ');</div>';
+        code += '<div class="ti2">' + name + '[key] = newItem;</div>';
         code += '<div class="ti1">}</div>';
     }
     if (block.dataset.delete === "open" || block.dataset.delete === "close"){

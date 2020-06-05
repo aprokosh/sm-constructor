@@ -76,6 +76,7 @@ function generateHLFStructs(structList) {
         let names = structList[i].dataset.structnames.split(',');
         for (let j = 0; j<k; ++j){
             if (types[j]==="address") types[j]="string";
+            if (types[j]==="uint") types[j]="uint64";
             code += '<div class="ti1">' + capitalizeFirst(names[j]) + ' ' + types[j] + '</div>';
         }
         code += '<div>}</div><br>';
@@ -153,13 +154,14 @@ function generateHLFInvoke(contractName, addedFuncs){
 
     invoke += '<div class="ti1">if function == "' + addedFuncs[0] + '"{ </div>' +
                 '<div class="ti2">result, err = ' + addedFuncs[0] + '(stub, args)</div>' +
-                '<div class="ti1">}</div>';
+                '<div class="ti1">}';
 
     for (let i=1; i<n; ++i) {
-        invoke += '<div class="ti1"> else if function == "' + addedFuncs[i] + '"{ </div>' +
+        invoke += ' else if function == "' + addedFuncs[i] + '"{ </div>' +
                 '<div class="ti2">result, err = ' + addedFuncs[i] + '(stub, args)</div>' +
-                '<div class="ti1">}</div>';
+                '<div class="ti1">}';
     }
+    invoke += '</div>';
 
     invoke += '<div class="ti1">if err != nil {</div>' +
                 '<div class="ti2">return  shim.Error(err.Error())</div>' +
@@ -180,12 +182,12 @@ function convertingFunc(fromType, toType, varName){
         switch (toType){
             case "int":
                 return 'strconv.Atoi(' + varName + ')';
-            case "uint":
-                return 'strconv.FormatUint(' + varName + ', 16)';
+            case "uint64":
+                return 'strconv.ParseUint(' + varName + ', 10, 64)';
             case "bool":
-                return 'strconv.FormatBool(' + varName + ')';
+                return 'strconv.ParseBool(' + varName + ')';
             case "float":
-                return 'strconv.FormatFloat(' + varName + ', "E", -1, 64)';
+                return 'strconv.ParseFloat(' + varName + ', 64)';
             default:
                 return varName;
         }
@@ -276,7 +278,7 @@ function HLF_delete(functionName, contractName, delFunc){
 
     delCode += '<div class="ti1">err = stub.DelState(args[0])</div>' +
         '<div class="ti1">if err != nil {</div>' +
-        '<div class="ti2">return fmt.Errorf("Failed to delete: %s", args[0])</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Failed to delete: %s", args[0])</div>' +
         '<div class="ti1">}</div>';
 
     delCode += '<div class="ti1">return "Deleted", nil</div>' +
@@ -322,7 +324,10 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
     let structName = struct.dataset.structname;
     let n_1 = Number(n)+Number(1);
     let types = struct.dataset.structtypes.split(',');
-    for (let j = 0; j<n; ++j) if (types[j]==="address") types[j]="string";
+    for (let j = 0; j<n; ++j) {
+        if (types[j]==="address") types[j]="string";
+        if (types[j]==="uint") types[j]="uint64";
+    }
     let names = struct.dataset.structnames.split(',');
 
     setCode += '<div>func ' + functionName + '(stub shim.ChaincodeStubInterface, args []string) (string, error) {';
@@ -334,7 +339,7 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
     setCode += '<div class="ti1"> var ' + structName + 'JSONasBytes []byte</div>';
 
     setCode += '<div class="ti1">if len(args) != ' + n_1 + '{</div>' +
-        '<div class="ti2">return Error(401, "Incorrect number of arguments. Expecting ' + n_1 + ': a key and struct arguments")</div>' +
+        '<div class="ti2">return "", fmt.Errorf("Incorrect number of arguments. Expecting ' + n_1 + ': a key and struct arguments")</div>' +
         '<div class="ti1">}</div>';
 
     for (let i=1; i<=n; ++i) {
@@ -350,7 +355,7 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
     for (let i=1; i<n; ++i) setCode += ', ' + names[i];
     setCode += '}</div>';
 
-    setCode += '<div class="ti1">' + structName + 'JSONasBytes, err := json.Marshal(' + structName + ')</div>';
+    setCode += '<div class="ti1">' + structName + 'JSONasBytes, err = json.Marshal(' + structName + ')</div>';
     setCode += '<div class="ti1">if err != nil {</div>' +
                 '<div class="ti2">return "", fmt.Errorf("Trouble while making JSON")</div>' +
                 '<div class="ti1">}</div>';
@@ -395,7 +400,7 @@ function HLF_structDelete(functionName, contractName, delFunc, struct){
                 '<div class="ti2">return "", fmt.Errorf("JSON Is Not Valid")</div>' +
                 '<div class="ti1">}</div>';
 
-    delCode += '<div class="ti1">err = stub.DelState(key)</div>' +
+    delCode += '<div class="ti1">err = stub.DelState(args[0])</div>' +
                 '<div class="ti1">if err != nil {</div>' +
                 '<div class="ti2">return "", fmt.Errorf("Failed to delete: %s", args[0])</div>' +
                  '<div class="ti1">}</div>';

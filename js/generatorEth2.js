@@ -11,6 +11,7 @@ function generateEth2 (contractName, blockList, structList, version){
     headerCode += '<h4>Поле для редактирования кода</h4></div>';
     document.getElementById('placeForHeader').innerHTML = headerCode;
     let code = '<div id="wholeContract" class="codeBlock">';
+
     code += generateEthBase(contractName, version);
     code += generateEthStructs(structList);
     code += generateEthFunctions2(blockList, structList, typesList);
@@ -93,6 +94,7 @@ function EthStructFunc2 (block, struct, typesList){
         if (types[i]==="float") types[i]="int"
     }
     let names = struct.dataset.structnames.split(',');
+
     if (block.dataset.get === "open" || block.dataset.get === "close"){
         code += '<div class="ti1"> function get_' + block.dataset.get + '_' + name + '(string memory key) public view returns (';
         for (let i = 0; i<n-1; ++i)
@@ -106,6 +108,7 @@ function EthStructFunc2 (block, struct, typesList){
         code += name + '[key].' + names[n-1] + ');</div>';
         code += '<div class="ti1">}</div>';
     }
+
     if (block.dataset.set === "open" || block.dataset.set === "close"){
         code += '<div class="ti1">function set_' + block.dataset.set + '_' + name + '(string memory key';
         for (let i = 0; i<n; ++i)
@@ -114,16 +117,20 @@ function EthStructFunc2 (block, struct, typesList){
         if (block.dataset.set === "close")
             code += '<div class="ti2">require (msg.sender==owner, "Access to set this type is only for owner");</div>'
 
-        code += '<div class=ti2>string deleteType = typeMapping[key];</div>';
+        code += '<div class=ti2>string memory deleteType = typeMapping[key];</div>';
         for (let i = 0; i<typesList.length; ++i){
-            code += '<div class="ti3">if (deleteType == ' + typesList[i] + ') delete ' + typesList[i] + '_[key];</div>'
+            code += '<div class="ti3">if (keccak256(bytes(deleteType)) == keccak256(bytes("' + typesList[i] + '"))) delete ' + typesList[i] + '_[key];</div>'
         }
+        code += '<div class="ti2">' + structName + ' memory newItem = ' + structName + '(arg_' + names[0];
+        for (let i = 1; i<n; ++i)
+            code += ', arg_' + names[i];
+        code += ');</div>';
 
-        code += '<div class="ti2">' + structName + ' memory newItem = ' + name + '[key];</div>';
-        for (let i = 0; i<n; ++i)
-            code += '<div class="ti2"> newItem.' + names[i] + ' = arg' + i + ';</div>';
+        code += '<div class="ti2">' + name + '[key] = newItem;</div>' +
+            '<div class="ti2">typeMapping[key] = "' + name + '";</div>';
         code += '<div class="ti1">}</div>';
     }
+
     if (block.dataset.delete === "open" || block.dataset.delete === "close"){
         code += '<div class="ti1"> function delete_' + block.dataset.delete + '_' + name + '(string memory key) public {</div>';
         if (block.dataset.delete === "close")
@@ -165,14 +172,14 @@ function EthSet2(varType, setFunc, typesList){
     if(setFunc === "close")
         setCode += '<div class="ti2">require (msg.sender==owner, "Access to set this type is only for owner");</div>'
 
-    setCode += '<div class=ti2>string deleteType = typeMapping[key];</div>';
+    setCode += '<div class=ti2>string memory deleteType = typeMapping[key];</div>';
     for (let i = 0; i<typesList.length; ++i)
     {
-        setCode += '<div class="ti3">if (deleteType == ' + typesList[i] + ') delete ' + typesList[i] + '_[key];</div>'
+        setCode += '<div class="ti3">if (keccak256(bytes(deleteType)) == keccak256(bytes("' + typesList[i] + '"))) delete ' + typesList[i] + '_[key];</div>'
     }
-
+    if (varType === "string memory") varType = "string";
     setCode += '<div class="ti2">' + name + '[key] = data;</div>' +
-            '<div class="ti2">typeMapping[key] = ' + varType + ';</div>';
+            '<div class="ti2">typeMapping[key] = "' + varType + '";</div>';
     setCode += '<div class="ti1">}</div>';
 
     return setCode;
