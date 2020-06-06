@@ -355,6 +355,9 @@ function HLF_structSet(functionName, contractName, setFunc, struct){
         if (types[i-1] !== "string") {
             let conv = convertingFunc("string", types[i - 1], argName);
             setCode += '<div class="ti1">' + names[i - 1] + ', err = ' + conv + '</div>';
+            setCode += '<div class="ti1">if err != nil {</div>' +
+                '<div class="ti2">return "", fmt.Errorf("Incorrect argument type. Expected ' + types[i-1] + '")</div>' +
+                '<div class="ti1">}</div>';
         }
         else setCode += '<div class="ti1">' + names[i - 1] + ' = ' + argName + '</div>';
     }
