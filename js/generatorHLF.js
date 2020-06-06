@@ -1,4 +1,6 @@
 function generateHLF (contractName, blockList, structList){
+    let isClosed = false;
+
     for (let i=0; i<blockList.length; ++i){
         if (blockList[i].dataset.typeofvar === "address") {
             blockList[i].dataset.typeofvar = "string";
@@ -7,6 +9,10 @@ function generateHLF (contractName, blockList, structList){
         if (blockList[i].dataset.typeofkey === "address") {
             blockList[i].dataset.typeofkey = "string";
             blockList[i].dataset.type = blockList[i].dataset.type.replace("address", "string");
+        }
+        if ((blockList[i].dataset.get === "close") ||
+                    (blockList[i].dataset.set === "close") || (blockList[i].dataset.delete === "close")) {
+            isClosed = true;
         }
     }
 
@@ -19,7 +25,7 @@ function generateHLF (contractName, blockList, structList){
     document.getElementById('placeForHeader').innerHTML = headerCode;
 
     let code = '<div id="wholeContract" class="codeBlock">';
-    code += generateHLFBase(contractName);
+    code += generateHLFBase(contractName, isClosed);
     code += generateHLFStructs(structList);
     code += generateHLFBase2(contractName);
     code += generateHLFFunctions(contractName, blockList, structList);
@@ -31,18 +37,20 @@ function generateHLF (contractName, blockList, structList){
     document.getElementById('placeForSaveButton').innerHTML = buttonCode;
 }
 
-function generateHLFBase(contractName) {
+function generateHLFBase(contractName, isClosed) {
     let baseCode = "";
     baseCode += '<div>package main</div><br>';
 
     baseCode += '<div>import (</div>';
     baseCode += '<div class="ti1">"encoding/json"</div>' +
-        '<div class="ti1">"strconv"</div>' +
-        '<div class="ti1">"github.com/hyperledger/fabric-chaincode-go/pkg/cid"</div>' +
-        '<div class="ti1">"fmt"</div>' +
-        '<div class="ti1">"github.com/hyperledger/fabric-chaincode-go/shim"</div>' +
-        '<div class="ti1">"github.com/hyperledger/fabric-protos-go/peer"</div>' +
-        '<div>)</div><br>';
+                '<div class="ti1">"strconv"</div>';
+
+    if (isClosed) baseCode += '<div class="ti1">"github.com/hyperledger/fabric-chaincode-go/pkg/cid"</div>';
+
+    baseCode += '<div class="ti1">"fmt"</div>' +
+                '<div class="ti1">"github.com/hyperledger/fabric-chaincode-go/shim"</div>' +
+                '<div class="ti1">"github.com/hyperledger/fabric-protos-go/peer"</div>' +
+                '<div>)</div><br>';
 
     baseCode += '<div> type ' + contractName + ' struct{</div>';
     baseCode += '<div>}</div><br>' +
