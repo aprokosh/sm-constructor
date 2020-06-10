@@ -30,7 +30,6 @@ function generateEthFunctions2(blockList, structList, typesList) {
     //проходим по каждому элементу в блоклист
     //когда добавили ему одну из функций, добавляем typeofkey-typeofvar-get-open в массив
     //для каждого проверяем, нет ли такого уже в массиве
-    funcCode += '<div class="ti1">mapping(string => string) typeMapping;</div>'
     let addedFuncs = [];
     let addedMap = []
     for (let i = 0 ; i<n; ++i) {
