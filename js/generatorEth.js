@@ -14,11 +14,11 @@ function generateEth (contractName, blockList, varNames, structList, version){
     let code = '<div id="wholeContract" class="codeBlock">';
 
     code += generateEthBase(contractName, version);
-    code += generateEthStructs(varNames, structList);
+
+    code += generateEthStructs(structList);
     code += generateEthFunctions(blockList, varNames, structList);
     code += '<div>}</div>';
     code += '</div>';
-
     document.getElementById('mytextarea').innerHTML = code;
 
     let buttonCode = '<div class="codeBlock"><button id="saveToDB" onclick="saveCodeToDB(this)" class="btn btn-outline-light">Сохранить</button></div>';
